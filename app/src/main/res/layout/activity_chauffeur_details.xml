@@ -83,8 +83,14 @@
             <TextView style="@style/FieldLabel"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:text="@string/label_assigned_vehicle" />
-            <EditText android:id="@+id/input_vehicle" style="@style/Input"
-                android:inputType="text" android:autofillHints="" />
+
+            <Spinner
+                android:id="@+id/spinner_vehicle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:background="@drawable/bg_input"
+                android:paddingStart="@dimen/space_l"
+                android:paddingEnd="@dimen/space_l" />
 
             <TextView style="@style/FieldLabel"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
