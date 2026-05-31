@@ -44,9 +44,6 @@ public class PositionFragment extends Fragment implements OnMapReadyCallback {
         ((TextView) v.findViewById(R.id.text_last_update))
                 .setText(getString(R.string.last_update, "10:24:30"));
 
-        v.findViewById(R.id.btn_send_position).setOnClickListener(x ->
-                Toast.makeText(getContext(), R.string.position_sent_toast, Toast.LENGTH_SHORT).show());
-
         mapView = v.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);

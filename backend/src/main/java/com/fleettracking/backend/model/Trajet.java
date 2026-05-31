@@ -16,6 +16,8 @@ public class Trajet {
     private String id;
     @Column(name = "trajet_date")
     private String date;
+    private String chauffeurId;
+    private String vehiculeId;
     private String vehiculeNom;
     private String depart;
     private String arrivee;
@@ -25,6 +27,11 @@ public class Trajet {
     private String duree;
     private int vitesseMoyenne;
     private double consommation;
+    private boolean enCours;
+    private double departLat;
+    private double departLng;
+    private double arriveeLat;
+    private double arriveeLng;
 
     public Trajet() {}
 
@@ -37,6 +44,10 @@ public class Trajet {
     public void setId(String id) { this.id = id; }
     public String getDate() { return date; }
     public void setDate(String date) { this.date = date; }
+    public String getChauffeurId() { return chauffeurId; }
+    public void setChauffeurId(String chauffeurId) { this.chauffeurId = chauffeurId; }
+    public String getVehiculeId() { return vehiculeId; }
+    public void setVehiculeId(String vehiculeId) { this.vehiculeId = vehiculeId; }
     public String getVehiculeNom() { return vehiculeNom; }
     public void setVehiculeNom(String vehiculeNom) { this.vehiculeNom = vehiculeNom; }
     public String getDepart() { return depart; }
@@ -55,4 +66,14 @@ public class Trajet {
     public void setVitesseMoyenne(int vitesseMoyenne) { this.vitesseMoyenne = vitesseMoyenne; }
     public double getConsommation() { return consommation; }
     public void setConsommation(double consommation) { this.consommation = consommation; }
+    public boolean isEnCours() { return enCours; }
+    public void setEnCours(boolean enCours) { this.enCours = enCours; }
+    public double getDepartLat() { return departLat; }
+    public void setDepartLat(double departLat) { this.departLat = departLat; }
+    public double getDepartLng() { return departLng; }
+    public void setDepartLng(double departLng) { this.departLng = departLng; }
+    public double getArriveeLat() { return arriveeLat; }
+    public void setArriveeLat(double arriveeLat) { this.arriveeLat = arriveeLat; }
+    public double getArriveeLng() { return arriveeLng; }
+    public void setArriveeLng(double arriveeLng) { this.arriveeLng = arriveeLng; }
 }

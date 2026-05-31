@@ -157,6 +157,7 @@
                     android:layout_marginTop="@dimen/space_m">
 
                     <ImageView
+                        android:id="@+id/img_vehicle_thumb"
                         android:layout_width="@dimen/vehicle_thumb_w"
                         android:layout_height="@dimen/vehicle_thumb_h"
                         android:background="@drawable/bg_vehicle_thumb"
@@ -210,92 +211,9 @@
                             android:text="@string/label_mileage" />
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-
-            <!-- Mission du jour -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/space_l"
-                android:background="@drawable/bg_card"
-                android:padding="@dimen/space_l"
-                android:elevation="@dimen/elevation_card">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="@dimen/icon_s"
-                        android:layout_height="@dimen/icon_s"
-                        android:src="@drawable/ic_calendar"
-                        android:tint="@color/primary" />
-
-                    <TextView
-                        style="@style/TextSubtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_s"
-                        android:text="@string/mission_today" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="@dimen/space_m">
-
-                    <TextView
-                        style="@style/TextSubtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/primary"
-                        android:text="@string/loc_rabat" />
-
-                    <ImageView
-                        android:layout_width="@dimen/icon_s"
-                        android:layout_height="@dimen/icon_s"
-                        android:layout_marginStart="@dimen/space_s"
-                        android:layout_marginEnd="@dimen/space_s"
-                        android:src="@drawable/ic_chevron_right"
-                        android:tint="@color/text_secondary" />
-
-                    <TextView
-                        style="@style/TextSubtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/loc_casablanca" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/space_s">
-
-                    <TextView
-                        style="@style/TextSecondary"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@color/primary"
-                        android:text="@string/mission_depart_sample" />
-
-                    <TextView
-                        style="@style/TextSecondary"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@color/primary"
-                        android:text="@string/mission_arrival_sample" />
-                </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_start_trip"
+                    android:id="@+id/btn_trip_control"
                     style="@style/PrimaryButton"
                     android:layout_marginTop="@dimen/space_l"
                     app:icon="@drawable/ic_play"

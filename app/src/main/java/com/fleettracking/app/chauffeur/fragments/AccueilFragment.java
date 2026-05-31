@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.fleettracking.app.R;
@@ -20,9 +22,15 @@ import com.fleettracking.app.data.RepoCallback;
 import com.fleettracking.app.data.Repository;
 import com.fleettracking.app.model.Chauffeur;
 import com.fleettracking.app.model.Vehicule;
+import com.fleettracking.app.util.ImageUtils;
 import com.fleettracking.app.util.Prefs;
+import com.fleettracking.app.util.TripManager;
+import com.google.android.material.button.MaterialButton;
 
 public class AccueilFragment extends Fragment {
+
+    private Vehicule currentVehicule;
+    private MaterialButton btnTrip;
 
     @Nullable
     @Override
@@ -37,13 +45,14 @@ public class AccueilFragment extends Fragment {
 
         Repository repo = new Repository(requireContext());
         String userId = new Prefs(requireContext()).getUserId();
+        TripManager tripManager = TripManager.getInstance(requireContext());
 
         repo.getChauffeur(userId, new RepoCallback<Chauffeur>() {
             @Override public void onResult(Chauffeur driver) {
                 if (!isAdded()) return;
-                String firstName = driver.nom.split(" ")[0];
+                String name = driver.nom.split(" ")[0];
                 ((TextView) v.findViewById(R.id.text_greeting))
-                        .setText(getString(R.string.greeting_hello, firstName));
+                        .setText(getString(R.string.greeting_hello, name));
             }
             @Override public void onError(String message) { /* keep default */ }
         });
@@ -51,16 +60,31 @@ public class AccueilFragment extends Fragment {
         repo.getCurrentVehicule(userId, new RepoCallback<Vehicule>() {
             @Override public void onResult(Vehicule vehicule) {
                 if (!isAdded()) return;
+                currentVehicule = vehicule;
                 ((TextView) v.findViewById(R.id.text_vehicle_name)).setText(vehicule.getNomComplet());
                 ((TextView) v.findViewById(R.id.text_vehicle_plate)).setText(vehicule.immatriculation);
                 ((TextView) v.findViewById(R.id.text_vehicle_km))
                         .setText(String.format("%,d km", vehicule.kilometrage));
+                
+                ImageUtils.bind(v.findViewById(R.id.img_vehicle_thumb), vehicule.photo, R.drawable.ic_truck);
+                updateTripButton();
             }
-            @Override public void onError(String message) { /* keep default */ }
+            @Override public void onError(String message) {
+                v.findViewById(R.id.btn_trip_control).setVisibility(View.GONE);
+            }
         });
 
-        v.findViewById(R.id.btn_start_trip).setOnClickListener(x ->
-                Toast.makeText(getContext(), R.string.start_trip, Toast.LENGTH_SHORT).show());
+        btnTrip = v.findViewById(R.id.btn_trip_control);
+        btnTrip.setOnClickListener(x -> {
+            if (tripManager.isTripActive()) {
+                tripManager.stopTrip();
+                Toast.makeText(getContext(), "Trajet arrêté", Toast.LENGTH_SHORT).show();
+            } else if (currentVehicule != null) {
+                tripManager.startTrip(currentVehicule.id);
+                Toast.makeText(getContext(), "Trajet démarré", Toast.LENGTH_SHORT).show();
+            }
+            updateTripButton();
+        });
 
         ChauffeurMainActivity host = (ChauffeurMainActivity) requireActivity();
         v.findViewById(R.id.shortcut_position).setOnClickListener(x ->
@@ -71,5 +95,19 @@ public class AccueilFragment extends Fragment {
                 host.selectTab(ChauffeurMainActivity.TAB_VEHICULE));
         v.findViewById(R.id.shortcut_consumption).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), HistoriqueActivity.class)));
+    }
+
+    private void updateTripButton() {
+        if (btnTrip == null) return;
+        boolean active = TripManager.getInstance(requireContext()).isTripActive();
+        if (active) {
+            btnTrip.setText(R.string.stop_trip);
+            btnTrip.setIconResource(R.drawable.ic_stop);
+            btnTrip.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.danger));
+        } else {
+            btnTrip.setText(R.string.start_trip);
+            btnTrip.setIconResource(R.drawable.ic_play);
+            btnTrip.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.primary));
+        }
     }
 }

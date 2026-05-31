@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg">
+
+    <include layout="@layout/toolbar_back" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/space_l">
+
+        <TextView style="@style/FieldLabel"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/label_fullname" />
+        <EditText android:id="@+id/input_name" style="@style/Input"
+            android:inputType="textPersonName" android:autofillHints="name" />
+
+        <TextView style="@style/FieldLabel"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/label_email" />
+        <EditText android:id="@+id/input_email" style="@style/Input"
+            android:inputType="textEmailAddress" android:autofillHints="emailAddress" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save"
+            style="@style/PrimaryButton"
+            android:layout_marginTop="@dimen/space_xl"
+            android:text="@string/save" />
+    </LinearLayout>
+</LinearLayout>

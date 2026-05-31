@@ -1,5 +1,6 @@
 package com.fleettracking.app.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fleettracking.app.R;
+import com.fleettracking.app.admin.IncidentDetailsActivity;
 import com.fleettracking.app.model.Incident;
 import com.fleettracking.app.util.UiUtils;
 
@@ -38,6 +40,12 @@ public class IncidentAdapter extends RecyclerView.Adapter<IncidentAdapter.VH> {
         h.description.setText(in.description);
         h.date.setText(in.date);
         UiUtils.applyStatusChip(h.status, in.statut);
+        
+        h.itemView.setOnClickListener(v -> {
+            Intent i = new Intent(v.getContext(), IncidentDetailsActivity.class);
+            i.putExtra(IncidentDetailsActivity.EXTRA_INCIDENT_ID, in.id);
+            v.getContext().startActivity(i);
+        });
     }
 
     @Override

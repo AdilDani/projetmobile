@@ -1,5 +1,6 @@
 package com.fleettracking.backend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
@@ -20,9 +21,12 @@ public class Vehicule {
     private int kilometrage;
     private String statut;
     private int carburantPct;
+    private double consommation;          // L/100km
     private String prochaineVidange;
     private String controleTechnique;
     private String conducteurId;
+    @Column(columnDefinition = "text")
+    private String photo;                 // base64-encoded image, nullable
     private double lat;
     private double lng;
     private int vitesse;
@@ -50,6 +54,10 @@ public class Vehicule {
     public void setStatut(String statut) { this.statut = statut; }
     public int getCarburantPct() { return carburantPct; }
     public void setCarburantPct(int carburantPct) { this.carburantPct = carburantPct; }
+    public double getConsommation() { return consommation; }
+    public void setConsommation(double consommation) { this.consommation = consommation; }
+    public String getPhoto() { return photo; }
+    public void setPhoto(String photo) { this.photo = photo; }
     public String getProchaineVidange() { return prochaineVidange; }
     public void setProchaineVidange(String prochaineVidange) { this.prochaineVidange = prochaineVidange; }
     public String getControleTechnique() { return controleTechnique; }

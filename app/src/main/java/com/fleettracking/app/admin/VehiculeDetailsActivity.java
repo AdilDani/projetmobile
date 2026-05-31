@@ -1,31 +1,48 @@
 package com.fleettracking.app.admin;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.fleettracking.app.R;
 import com.fleettracking.app.data.RepoCallback;
 import com.fleettracking.app.data.Repository;
 import com.fleettracking.app.model.Chauffeur;
 import com.fleettracking.app.model.Vehicule;
+import com.fleettracking.app.util.ImageUtils;
 import com.fleettracking.app.util.UiUtils;
 
 public class VehiculeDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_VEHICLE_ID = "extra_vehicle_id";
 
-    private LinearLayout container;
-    private LayoutInflater inflater;
     private Repository repo;
+    private Vehicule current;
+    
+    private ImageView imgVehicle;
+    private EditText inputBrand, inputModel, inputPlate, inputYear, inputMileage, inputConsumption, inputVidange, inputControle;
+
+    private final ActivityResultLauncher<String> picker = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            uri -> {
+                if (uri != null) {
+                    String base64 = ImageUtils.encodeFromUri(this, uri);
+                    if (base64 != null) {
+                        current.photo = base64;
+                        ImageUtils.bind(imgVehicle, base64, R.drawable.ic_truck);
+                    }
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,41 +53,64 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.vehicle_details_title);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
-        ImageView action = findViewById(R.id.btn_action);
-        action.setVisibility(View.VISIBLE);
-        action.setImageResource(R.drawable.ic_edit);
-
-        inflater = LayoutInflater.from(this);
-        container = findViewById(R.id.details_container);
+        
+        imgVehicle = findViewById(R.id.img_vehicle);
+        inputBrand = findViewById(R.id.input_brand);
+        inputModel = findViewById(R.id.input_model);
+        inputPlate = findViewById(R.id.input_plate);
+        inputYear = findViewById(R.id.input_year);
+        inputMileage = findViewById(R.id.input_mileage);
+        inputConsumption = findViewById(R.id.input_consumption);
+        inputVidange = findViewById(R.id.input_vidange);
+        inputControle = findViewById(R.id.input_controle);
 
         String id = getIntent().getStringExtra(EXTRA_VEHICLE_ID);
         repo.getVehicule(id == null ? "v1" : id, new RepoCallback<Vehicule>() {
-            @Override public void onResult(Vehicule x) { bind(x); }
+            @Override public void onResult(Vehicule x) { current = x; bind(x); }
             @Override public void onError(String message) {
                 Toast.makeText(VehiculeDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
             }
+        });
+
+        findViewById(R.id.btn_change_photo).setOnClickListener(v -> picker.launch("image/*"));
+
+        findViewById(R.id.btn_save).setOnClickListener(v -> save());
+
+        findViewById(R.id.btn_see_map).setOnClickListener(v -> {
+            Intent i = new Intent(this, AdminMainActivity.class);
+            i.putExtra(AdminMainActivity.EXTRA_OPEN_CARTE, true);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
         });
     }
 
     private void bind(Vehicule x) {
         ((TextView) findViewById(R.id.text_vehicle_name)).setText(x.getNomComplet());
+        TextView status = findViewById(R.id.text_vehicle_status);
+        status.setText(x.statut);
+        status.setTextColor(UiUtils.statusColor(this, x.statut));
 
-        int textPrimary = ContextCompat.getColor(this, R.color.text_primary);
-        container.removeAllViews();
-        addRow(R.string.label_plate, x.immatriculation, textPrimary);
-        addRow(R.string.label_brand, x.marque, textPrimary);
-        addRow(R.string.label_model, x.modele, textPrimary);
-        addRow(R.string.label_year, String.valueOf(x.annee), textPrimary);
-        addRow(R.string.label_mileage, String.format("%,d km", x.kilometrage), textPrimary);
-        addRow(R.string.label_status, x.statut, UiUtils.statusColor(this, x.statut));
+        ImageUtils.bind(imgVehicle, x.photo, R.drawable.ic_truck);
+
+        inputBrand.setText(x.marque);
+        inputModel.setText(x.modele);
+        inputPlate.setText(x.immatriculation);
+        inputYear.setText(String.valueOf(x.annee));
+        inputMileage.setText(String.valueOf(x.kilometrage));
+        inputConsumption.setText(String.valueOf(x.consommation));
+        inputVidange.setText(x.prochaineVidange);
+        inputControle.setText(x.controleTechnique);
 
         TextView dn = findViewById(R.id.driver_name);
         TextView dp = findViewById(R.id.driver_phone);
+        ImageView di = findViewById(R.id.img_driver);
+
         if (x.conducteurId != null && !x.conducteurId.isEmpty()) {
             repo.getChauffeur(x.conducteurId, new RepoCallback<Chauffeur>() {
                 @Override public void onResult(Chauffeur driver) {
                     dn.setText(driver.nom);
                     dp.setText(driver.telephone);
+                    ImageUtils.bind(di, driver.photo, R.drawable.ic_person);
                     findViewById(R.id.driver_card).setOnClickListener(v -> {
                         Intent i = new Intent(VehiculeDetailsActivity.this, ChauffeurDetailsActivity.class);
                         i.putExtra(ChauffeurDetailsActivity.EXTRA_CHAUFFEUR_ID, driver.id);
@@ -85,30 +125,32 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         } else {
             dn.setText(R.string.assigned_driver);
             dp.setText("--");
+            di.setImageResource(R.drawable.ic_person);
         }
-
-        findViewById(R.id.btn_see_map).setOnClickListener(v -> {
-            Intent i = new Intent(this, AdminMainActivity.class);
-            i.putExtra(AdminMainActivity.EXTRA_OPEN_CARTE, true);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
-        });
     }
 
-    private void addRow(int labelRes, String value, int valueColor) {
-        View row = inflater.inflate(R.layout.item_detail_row, container, false);
-        row.findViewById(R.id.row_icon).setVisibility(View.GONE);
-        ((TextView) row.findViewById(R.id.row_label)).setText(labelRes);
-        TextView val = row.findViewById(R.id.row_value);
-        val.setText(value);
-        val.setTextColor(valueColor);
-        container.addView(row);
+    private void save() {
+        if (current == null) return;
 
-        View d = new View(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 1);
-        d.setLayoutParams(lp);
-        d.setBackgroundColor(ContextCompat.getColor(this, R.color.divider));
-        container.addView(d);
+        current.marque = inputBrand.getText().toString();
+        current.modele = inputModel.getText().toString();
+        current.immatriculation = inputPlate.getText().toString();
+        try {
+            current.annee = Integer.parseInt(inputYear.getText().toString());
+            current.kilometrage = Integer.parseInt(inputMileage.getText().toString());
+            current.consommation = Double.parseDouble(inputConsumption.getText().toString());
+        } catch (NumberFormatException ignored) {}
+        current.prochaineVidange = inputVidange.getText().toString();
+        current.controleTechnique = inputControle.getText().toString();
+
+        repo.updateVehicule(current.id, current, new RepoCallback<Vehicule>() {
+            @Override public void onResult(Vehicule saved) {
+                ((TextView) findViewById(R.id.text_vehicle_name)).setText(saved.getNomComplet());
+                Toast.makeText(VehiculeDetailsActivity.this, R.string.saved_toast, Toast.LENGTH_SHORT).show();
+            }
+            @Override public void onError(String message) {
+                Toast.makeText(VehiculeDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

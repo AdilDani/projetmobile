@@ -34,6 +34,7 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
     private final List<Chauffeur> all = new ArrayList<>();
     private final List<Chauffeur> filtered = new ArrayList<>();
     private ChauffeurAdapter adapter;
+    private EditText search;
 
     @Nullable
     @Override
@@ -55,13 +56,21 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);
 
-        EditText search = v.findViewById(R.id.input_search);
+        search = v.findViewById(R.id.input_search);
         search.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) { filter(s.toString()); }
             @Override public void afterTextChanged(Editable s) {}
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        load();
+    }
+
+    private void load() {
         new Repository(requireContext()).getChauffeurs(new RepoCallback<List<Chauffeur>>() {
             @Override public void onResult(List<Chauffeur> list) {
                 all.clear();

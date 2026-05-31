@@ -7,14 +7,18 @@ public class Vehicule {
     public String immatriculation;
     public int annee;
     public int kilometrage;
-    public String statut;          // Disponible / En mission / Maintenance
+    public String statut;          // Disponible / Indisponible / En mission
     public int carburantPct;
+    public double consommation;    // L/100km
+    public String photo;           // base64-encoded image, may be null
     public String prochaineVidange;
     public String controleTechnique;
-    public String conducteurId;    // Chauffeur id, may be null
+    public String conducteurId;    // Chauffeur id, set only when "En mission"
     public double lat;
     public double lng;
     public int vitesse;            // km/h
+
+    public Vehicule() {}
 
     public Vehicule(String id, String marque, String modele, String immatriculation,
                     int annee, int kilometrage, String statut, int carburantPct,

@@ -9,6 +9,7 @@
     android:layout_marginBottom="@dimen/space_m">
 
     <ImageView
+        android:id="@+id/img_chauffeur"
         android:layout_width="@dimen/avatar_m"
         android:layout_height="@dimen/avatar_m"
         android:background="@drawable/bg_circle_pale"
@@ -38,14 +39,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_phone" />
-
-        <TextView
-            android:id="@+id/chauffeur_vehicle"
-            style="@style/TextCaption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_xs"
-            android:text="@string/label_assigned_vehicle" />
     </LinearLayout>
 
     <ImageView

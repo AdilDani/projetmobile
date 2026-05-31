@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/space_m">
+
+    <ImageView
+        android:id="@+id/img_thumbnail"
+        android:layout_width="@dimen/photo_thumb"
+        android:layout_height="@dimen/photo_thumb"
+        android:scaleType="centerCrop"
+        android:background="@drawable/bg_vehicle_thumb"
+        android:contentDescription="@string/field_photo" />
+
+    <ImageView
+        android:id="@+id/btn_remove"
+        android:layout_width="@dimen/icon_s"
+        android:layout_height="@dimen/icon_s"
+        android:layout_gravity="top|end"
+        android:layout_margin="4dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:background="@drawable/bg_circle_white"
+        android:padding="2dp"
+        android:contentDescription="@string/cancel" />
+</FrameLayout>

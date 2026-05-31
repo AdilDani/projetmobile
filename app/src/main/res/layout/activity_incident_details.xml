@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg">
+
+    <include layout="@layout/toolbar_back" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_l">
+
+            <!-- Summary Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card"
+                android:padding="@dimen/space_l"
+                android:elevation="@dimen/elevation_card"
+                android:layout_marginBottom="@dimen/space_l">
+
+                <TextView
+                    android:id="@+id/text_type"
+                    style="@style/TextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/field_incident_type" />
+
+                <TextView
+                    android:id="@+id/text_status"
+                    style="@style/TextSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="@string/tab_ongoing" />
+
+                <TextView
+                    android:id="@+id/text_date"
+                    style="@style/TextCaption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_m"
+                    android:text="@string/admin_date_sample" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/field_description" />
+
+            <TextView
+                android:id="@+id/text_description"
+                style="@style/TextBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card"
+                android:padding="@dimen/space_l"
+                android:elevation="@dimen/elevation_card"
+                android:text="@string/field_description_hint" />
+
+            <!-- Chauffeur Link -->
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_chauffeurs" />
+
+            <LinearLayout
+                android:id="@+id/card_chauffeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_card_clickable"
+                android:padding="@dimen/space_l"
+                android:elevation="@dimen/elevation_card">
+
+                <ImageView
+                    android:id="@+id/img_chauffeur"
+                    android:layout_width="@dimen/avatar_m"
+                    android:layout_height="@dimen/avatar_m"
+                    android:background="@drawable/bg_circle_pale"
+                    android:padding="@dimen/space_m"
+                    android:src="@drawable/ic_person"
+                    android:tint="@color/primary" />
+
+                <TextView
+                    android:id="@+id/text_chauffeur_name"
+                    style="@style/TextBody"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/space_m"
+                    android:textStyle="bold"
+                    android:text="@string/nav_chauffeurs" />
+
+                <ImageView
+                    android:layout_width="@dimen/icon_m"
+                    android:layout_height="@dimen/icon_m"
+                    android:src="@drawable/ic_chevron_right"
+                    android:tint="@color/text_tertiary" />
+            </LinearLayout>
+
+            <!-- Vehicle Link -->
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_vehicules" />
+
+            <LinearLayout
+                android:id="@+id/card_vehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_card_clickable"
+                android:padding="@dimen/space_l"
+                android:elevation="@dimen/elevation_card">
+
+                <ImageView
+                    android:id="@+id/img_vehicle"
+                    android:layout_width="@dimen/avatar_m"
+                    android:layout_height="@dimen/avatar_m"
+                    android:background="@drawable/bg_circle_pale"
+                    android:padding="@dimen/space_m"
+                    android:src="@drawable/ic_truck"
+                    android:tint="@color/primary" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/space_m"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text_vehicle_name"
+                        style="@style/TextBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/nav_vehicules" />
+
+                    <TextView
+                        android:id="@+id/text_vehicle_plate"
+                        style="@style/TextSecondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_plate" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/icon_m"
+                    android:layout_height="@dimen/icon_m"
+                    android:src="@drawable/ic_chevron_right"
+                    android:tint="@color/text_tertiary" />
+            </LinearLayout>
+
+            <!-- Photos Section -->
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/field_photo" />
+
+            <LinearLayout
+                android:id="@+id/photos_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -170,14 +170,5 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_send_position"
-            style="@style/PrimaryButton"
-            android:layout_marginTop="@dimen/space_l"
-            app:icon="@drawable/ic_play"
-            app:iconGravity="textStart"
-            app:iconTint="@color/white"
-            android:text="@string/send_my_position" />
     </LinearLayout>
 </LinearLayout>

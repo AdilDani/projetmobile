@@ -36,6 +36,7 @@ public class VehiculesFragment extends Fragment {
     private final List<Vehicule> all = new ArrayList<>();
     private final List<Vehicule> filtered = new ArrayList<>();
     private VehiculeAdapter adapter;
+    private EditText search;
 
     @Nullable
     @Override
@@ -67,13 +68,21 @@ public class VehiculesFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);
 
-        EditText search = v.findViewById(R.id.input_search);
+        search = v.findViewById(R.id.input_search);
         search.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) { filter(s.toString()); }
             @Override public void afterTextChanged(Editable s) {}
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        load();
+    }
+
+    private void load() {
         new Repository(requireContext()).getVehicules(new RepoCallback<List<Vehicule>>() {
             @Override public void onResult(List<Vehicule> list) {
                 all.clear();

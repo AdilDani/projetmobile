@@ -41,9 +41,9 @@ public class ProfilActivity extends AppCompatActivity {
         notifSwitch.setChecked(prefs.isNotificationsEnabled());
         notifSwitch.setOnCheckedChangeListener((b, checked) -> prefs.setNotificationsEnabled(checked));
 
-        findViewById(R.id.row_personal).setOnClickListener(x -> toast(R.string.profile_personal_info));
-        findViewById(R.id.row_settings).setOnClickListener(x -> toast(R.string.profile_settings));
-        findViewById(R.id.row_help).setOnClickListener(x -> toast(R.string.profile_help));
+        findViewById(R.id.row_personal).setOnClickListener(x -> startActivity(new Intent(this, EditProfileActivity.class)));
+        findViewById(R.id.row_settings).setOnClickListener(x -> startActivity(new Intent(this, SettingsActivity.class)));
+        findViewById(R.id.row_help).setOnClickListener(x -> startActivity(new Intent(this, HelpActivity.class)));
         logout.setOnClickListener(x -> doLogout());
     }
 

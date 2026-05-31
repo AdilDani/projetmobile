@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fleettracking.app.R;
 import com.fleettracking.app.model.Chauffeur;
+import com.fleettracking.app.util.ImageUtils;
 
 import java.util.List;
 
@@ -43,7 +44,8 @@ public class ChauffeurAdapter extends RecyclerView.Adapter<ChauffeurAdapter.VH> 
         Chauffeur c = items.get(position);
         h.name.setText(c.nom);
         h.phone.setText(c.telephone);
-        h.vehicle.setText(c.vehiculeAffecte);
+        ImageUtils.bind(h.photo, c.photo, R.drawable.ic_person);
+        
         h.itemView.setOnClickListener(x -> { if (listener != null) listener.onClick(c); });
         h.call.setOnClickListener(x -> { if (listener != null) listener.onCall(c); });
         h.sms.setOnClickListener(x -> { if (listener != null) listener.onSms(c); });
@@ -55,13 +57,13 @@ public class ChauffeurAdapter extends RecyclerView.Adapter<ChauffeurAdapter.VH> 
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView name, phone, vehicle;
-        ImageView call, sms;
+        TextView name, phone;
+        ImageView photo, call, sms;
         VH(@NonNull View v) {
             super(v);
             name = v.findViewById(R.id.chauffeur_name);
             phone = v.findViewById(R.id.chauffeur_phone);
-            vehicle = v.findViewById(R.id.chauffeur_vehicle);
+            photo = v.findViewById(R.id.img_chauffeur);
             call = v.findViewById(R.id.btn_call);
             sms = v.findViewById(R.id.btn_sms);
         }

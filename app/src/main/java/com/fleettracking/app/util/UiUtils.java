@@ -18,7 +18,8 @@ public final class UiUtils {
             case "Disponible":
                 res = R.color.success; break;
             case "En mission":
-                res = R.color.primary; break;
+                res = R.color.info; break;
+            case "Indisponible":
             case "Maintenance":
                 res = R.color.warning; break;
             case "Résolu":
@@ -37,7 +38,8 @@ public final class UiUtils {
             case "Résolu":
                 return R.drawable.bg_chip_success;
             case "En mission":
-                return R.drawable.bg_chip_primary;
+                return R.drawable.bg_chip_info;
+            case "Indisponible":
             case "Maintenance":
                 return R.drawable.bg_chip_warning;
             case "En cours":

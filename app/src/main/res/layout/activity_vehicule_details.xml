@@ -27,33 +27,104 @@
                 android:gravity="center_horizontal"
                 android:background="@drawable/bg_card"
                 android:padding="@dimen/space_l"
-                android:elevation="@dimen/elevation_card">
+                android:elevation="@dimen/elevation_card"
+                android:layout_marginBottom="@dimen/space_l">
 
-                <ImageView
+                <FrameLayout
+                    android:id="@+id/btn_change_photo"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/detail_image_h"
-                    android:src="@drawable/ic_truck"
-                    android:tint="@color/text_secondary"
-                    android:contentDescription="@string/cd_vehicle_image" />
+                    android:layout_height="@dimen/detail_image_h">
+
+                    <ImageView
+                        android:id="@+id/img_vehicle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_truck"
+                        android:tint="@color/text_secondary"
+                        android:contentDescription="@string/cd_vehicle_image" />
+                    
+                    <ImageView
+                        android:layout_width="@dimen/icon_m"
+                        android:layout_height="@dimen/icon_m"
+                        android:layout_gravity="bottom|end"
+                        android:src="@drawable/ic_camera"
+                        android:tint="@color/primary"
+                        android:background="@drawable/bg_circle_white"
+                        android:padding="@dimen/space_xs" />
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/text_vehicle_name"
                     style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_s"
+                    android:layout_marginTop="@dimen/space_m"
                     android:text="@string/app_name" />
+                
+                <TextView
+                    android:id="@+id/text_vehicle_status"
+                    style="@style/TextSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="@string/status_available" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/details_container"
-                android:layout_width="match_parent"
+            <!-- Editable fields -->
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/space_l"
-                android:background="@drawable/bg_card"
-                android:padding="@dimen/space_l"
-                android:elevation="@dimen/elevation_card" />
+                android:text="@string/profile_personal_info" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_brand" />
+            <EditText android:id="@+id/input_brand" style="@style/Input"
+                android:inputType="text" android:autofillHints="" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_model" />
+            <EditText android:id="@+id/input_model" style="@style/Input"
+                android:inputType="text" android:autofillHints="" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_plate" />
+            <EditText android:id="@+id/input_plate" style="@style/Input"
+                android:inputType="text" android:autofillHints="" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_year" />
+            <EditText android:id="@+id/input_year" style="@style/Input"
+                android:inputType="number" android:autofillHints="" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_mileage" />
+            <EditText android:id="@+id/input_mileage" style="@style/Input"
+                android:inputType="number" android:autofillHints="" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_consumption" />
+            <EditText android:id="@+id/input_consumption" style="@style/Input"
+                android:inputType="numberDecimal" android:autofillHints="" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_next_service" />
+            <EditText android:id="@+id/input_vidange" style="@style/Input"
+                android:inputType="text" android:autofillHints="" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_technical_check" />
+            <EditText android:id="@+id/input_controle" style="@style/Input"
+                android:inputType="text" android:autofillHints="" />
 
             <TextView
                 style="@style/SectionLabel"
@@ -72,6 +143,7 @@
                 android:elevation="@dimen/elevation_card">
 
                 <ImageView
+                    android:id="@+id/img_driver"
                     android:layout_width="@dimen/avatar_m"
                     android:layout_height="@dimen/avatar_m"
                     android:background="@drawable/bg_circle_pale"
@@ -111,12 +183,18 @@
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_see_map"
+                android:id="@+id/btn_save"
                 style="@style/PrimaryButton"
                 android:layout_marginTop="@dimen/space_l"
+                android:text="@string/save_changes" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_see_map"
+                style="@style/SecondaryButton"
+                android:layout_marginTop="@dimen/space_m"
                 app:icon="@drawable/ic_map_pin"
                 app:iconGravity="textStart"
-                app:iconTint="@color/white"
+                app:iconTint="@color/primary"
                 android:text="@string/see_on_map" />
         </LinearLayout>
     </ScrollView>

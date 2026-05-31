@@ -49,6 +49,12 @@ public class CacheDbHelper extends SQLiteOpenHelper {
         db.insertWithOnConflict(TABLE, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    /** Remove the cached JSON for a key so the next read is forced to the network. */
+    public void delete(String key) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE, COL_KEY + "=?", new String[]{key});
+    }
+
     /** Read the cached JSON for a key, or null if absent. Runs synchronously. */
     public String load(String key) {
         SQLiteDatabase db = getReadableDatabase();

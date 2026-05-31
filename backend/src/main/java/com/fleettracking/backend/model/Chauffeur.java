@@ -1,5 +1,6 @@
 package com.fleettracking.backend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
@@ -16,11 +17,12 @@ public class Chauffeur {
     private String nom;
     private String telephone;
     private String email;
-    private String vehiculeAffecte;
     private String permis;
     private String login;
     private String password;
     private String statut;
+    @Column(columnDefinition = "text")
+    private String photo;                 // base64-encoded image, nullable
 
     public Chauffeur() {}
 
@@ -37,8 +39,6 @@ public class Chauffeur {
     public void setTelephone(String telephone) { this.telephone = telephone; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public String getVehiculeAffecte() { return vehiculeAffecte; }
-    public void setVehiculeAffecte(String vehiculeAffecte) { this.vehiculeAffecte = vehiculeAffecte; }
     public String getPermis() { return permis; }
     public void setPermis(String permis) { this.permis = permis; }
     public String getLogin() { return login; }
