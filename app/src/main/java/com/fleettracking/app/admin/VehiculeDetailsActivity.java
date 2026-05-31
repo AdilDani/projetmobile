@@ -1,5 +1,6 @@
 package com.fleettracking.app.admin;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -26,6 +30,16 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
     private LinearLayout container;
     private LayoutInflater inflater;
     private Repository repo;
+    private String vehicleId;
+
+    private final ActivityResultLauncher<Intent> editLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    refresh();
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +47,60 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vehicule_details);
 
         repo = new Repository(this);
+        vehicleId = getIntent().getStringExtra(EXTRA_VEHICLE_ID);
+        if (vehicleId == null) vehicleId = "v1";
 
         ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.vehicle_details_title);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
+        
+        // Icône Modifier (Crayon)
         ImageView action = findViewById(R.id.btn_action);
         action.setVisibility(View.VISIBLE);
         action.setImageResource(R.drawable.ic_edit);
+        action.setOnClickListener(v -> {
+            Intent i = new Intent(this, EditVehiculeActivity.class);
+            i.putExtra(EditVehiculeActivity.EXTRA_VEHICLE_ID, vehicleId);
+            editLauncher.launch(i);
+        });
+
+        // Icône Supprimer (Corbeille) dans la toolbar
+        ImageView btnDelete = findViewById(R.id.btn_delete);
+        btnDelete.setVisibility(View.VISIBLE);
+        btnDelete.setOnClickListener(v -> showDeleteConfirmation());
 
         inflater = LayoutInflater.from(this);
         container = findViewById(R.id.details_container);
 
-        String id = getIntent().getStringExtra(EXTRA_VEHICLE_ID);
-        repo.getVehicule(id == null ? "v1" : id, new RepoCallback<Vehicule>() {
+        refresh();
+    }
+
+    private void showDeleteConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Supprimer le véhicule")
+                .setMessage("Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action est irréversible.")
+                .setPositiveButton("Supprimer", (dialog, which) -> deleteVehicle())
+                .setNegativeButton("Annuler", null)
+                .show();
+    }
+
+    private void deleteVehicle() {
+        repo.deleteVehicule(vehicleId, new RepoCallback<Void>() {
+            @Override
+            public void onResult(Void result) {
+                Toast.makeText(VehiculeDetailsActivity.this, "Véhicule supprimé", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK); // Pour rafraîchir la liste dans le fragment
+                finish();
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(VehiculeDetailsActivity.this, "Erreur lors de la suppression: " + message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void refresh() {
+        repo.getVehicule(vehicleId, new RepoCallback<Vehicule>() {
             @Override public void onResult(Vehicule x) { bind(x); }
             @Override public void onError(String message) {
                 Toast.makeText(VehiculeDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
@@ -85,6 +141,7 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         } else {
             dn.setText(R.string.assigned_driver);
             dp.setText("--");
+            findViewById(R.id.driver_card).setOnClickListener(null);
         }
 
         findViewById(R.id.btn_see_map).setOnClickListener(v -> {

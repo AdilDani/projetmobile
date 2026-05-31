@@ -1,5 +1,6 @@
 package com.fleettracking.app.admin.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,8 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fleettracking.app.R;
+import com.fleettracking.app.admin.AddVehiculeActivity;
 import com.fleettracking.app.admin.EntretiensActivity;
 import com.fleettracking.app.admin.IncidentsActivity;
 import com.fleettracking.app.admin.ProfilActivity;
@@ -36,6 +39,17 @@ public class VehiculesFragment extends Fragment {
     private final List<Vehicule> all = new ArrayList<>();
     private final List<Vehicule> filtered = new ArrayList<>();
     private VehiculeAdapter adapter;
+    private EditText searchInput;
+    private Repository repo;
+
+    private final ActivityResultLauncher<Intent> addVehiculeLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    loadVehicles(); // Refresh the list
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -47,16 +61,19 @@ public class VehiculesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
+        repo = new Repository(requireContext());
 
         ((TextView) v.findViewById(R.id.toolbar_title)).setText(R.string.nav_vehicules);
         View action = v.findViewById(R.id.btn_action);
         action.setVisibility(View.VISIBLE);
-        action.setOnClickListener(x ->
-                Toast.makeText(getContext(), R.string.add, Toast.LENGTH_SHORT).show());
+        action.setOnClickListener(x -> {
+            Intent intent = new Intent(getContext(), AddVehiculeActivity.class);
+            addVehiculeLauncher.launch(intent);
+        });
+
         v.findViewById(R.id.btn_profile).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), ProfilActivity.class)));
 
-        // Two shortcuts that open the Incidents and Entretiens pages.
         v.findViewById(R.id.btn_incidents).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), IncidentsActivity.class)));
         v.findViewById(R.id.btn_entretiens).setOnClickListener(x ->
@@ -67,18 +84,22 @@ public class VehiculesFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);
 
-        EditText search = v.findViewById(R.id.input_search);
-        search.addTextChangedListener(new TextWatcher() {
+        searchInput = v.findViewById(R.id.input_search);
+        searchInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) { filter(s.toString()); }
             @Override public void afterTextChanged(Editable s) {}
         });
 
-        new Repository(requireContext()).getVehicules(new RepoCallback<List<Vehicule>>() {
+        loadVehicles();
+    }
+
+    private void loadVehicles() {
+        repo.getVehicules(new RepoCallback<List<Vehicule>>() {
             @Override public void onResult(List<Vehicule> list) {
                 all.clear();
                 all.addAll(list);
-                filter(search.getText().toString());
+                filter(searchInput.getText().toString());
             }
             @Override public void onError(String message) { /* empty list */ }
         });
