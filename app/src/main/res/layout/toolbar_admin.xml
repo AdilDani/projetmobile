@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primary"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="@dimen/space_l">
+
+    <TextView
+        android:id="@+id/toolbar_title"
+        style="@style/ToolbarTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/app_name" />
+
+    <ImageView
+        android:id="@+id/btn_action"
+        android:layout_width="@dimen/icon_m"
+        android:layout_height="@dimen/icon_m"
+        android:layout_marginEnd="@dimen/space_l"
+        android:src="@drawable/ic_plus"
+        android:tint="@color/white"
+        android:visibility="gone"
+        android:contentDescription="@string/add" />
+
+    <ImageView
+        android:id="@+id/btn_profile"
+        android:layout_width="@dimen/avatar_s"
+        android:layout_height="@dimen/avatar_s"
+        android:background="@drawable/bg_circle_white"
+        android:padding="@dimen/space_s"
+        android:src="@drawable/ic_person"
+        android:tint="@color/primary"
+        android:contentDescription="@string/cd_profile" />
+</LinearLayout>

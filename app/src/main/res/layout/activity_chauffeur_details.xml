@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg">
+
+    <include layout="@layout/toolbar_back" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_l">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_card"
+                android:padding="@dimen/space_l"
+                android:layout_marginBottom="@dimen/space_l">
+
+                <ImageView
+                    android:layout_width="@dimen/avatar_l"
+                    android:layout_height="@dimen/avatar_l"
+                    android:background="@drawable/bg_circle_pale"
+                    android:padding="@dimen/space_l"
+                    android:src="@drawable/ic_person"
+                    android:tint="@color/primary"
+                    android:contentDescription="@string/cd_avatar" />
+
+                <TextView
+                    android:id="@+id/text_chauffeur_name"
+                    style="@style/TextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_m"
+                    android:text="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/text_chauffeur_status"
+                    style="@style/TextSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="@string/status_available" />
+            </LinearLayout>
+
+            <!-- Personal info -->
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/profile_personal_info" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_fullname" />
+            <EditText android:id="@+id/input_name" style="@style/Input"
+                android:inputType="textPersonName" android:autofillHints="name" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_phone" />
+            <EditText android:id="@+id/input_phone" style="@style/Input"
+                android:inputType="phone" android:autofillHints="phone" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_email" />
+            <EditText android:id="@+id/input_email" style="@style/Input"
+                android:inputType="textEmailAddress" android:autofillHints="emailAddress" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_assigned_vehicle" />
+            <EditText android:id="@+id/input_vehicle" style="@style/Input"
+                android:inputType="text" android:autofillHints="" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_license" />
+            <EditText android:id="@+id/input_license" style="@style/Input"
+                android:inputType="text" android:autofillHints="" />
+
+            <!-- Credentials -->
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/section_credentials" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_login" />
+            <EditText android:id="@+id/input_login" style="@style/Input"
+                android:inputType="text" android:autofillHints="username" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_password" />
+            <EditText android:id="@+id/input_password" style="@style/Input"
+                android:inputType="textPassword" android:autofillHints="password" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save"
+                style="@style/PrimaryButton"
+                android:layout_marginTop="@dimen/space_xl"
+                android:text="@string/save_changes" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

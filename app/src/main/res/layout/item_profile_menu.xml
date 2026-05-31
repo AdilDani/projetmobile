@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingTop="@dimen/space_l"
+    android:paddingBottom="@dimen/space_l"
+    android:paddingStart="@dimen/space_m"
+    android:paddingEnd="@dimen/space_m">
+
+    <ImageView
+        android:id="@+id/menu_icon"
+        android:layout_width="@dimen/avatar_s"
+        android:layout_height="@dimen/avatar_s"
+        android:background="@drawable/bg_circle_pale"
+        android:padding="@dimen/space_s"
+        android:src="@drawable/ic_person"
+        android:tint="@color/primary" />
+
+    <TextView
+        android:id="@+id/menu_label"
+        style="@style/TextBody"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/space_m"
+        android:text="@string/profile_personal_info" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/menu_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/menu_chevron"
+        android:layout_width="@dimen/icon_m"
+        android:layout_height="@dimen/icon_m"
+        android:src="@drawable/ic_chevron_right"
+        android:tint="@color/text_tertiary" />
+</LinearLayout>

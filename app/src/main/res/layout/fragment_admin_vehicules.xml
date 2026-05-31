@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg">
+
+    <include layout="@layout/toolbar_admin" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_input"
+        android:layout_margin="@dimen/space_l"
+        android:paddingStart="@dimen/space_l"
+        android:paddingEnd="@dimen/space_l">
+
+        <ImageView
+            android:layout_width="@dimen/icon_m"
+            android:layout_height="@dimen/icon_m"
+            android:src="@drawable/ic_search"
+            android:tint="@color/text_tertiary" />
+
+        <EditText
+            android:id="@+id/input_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/space_m"
+            android:background="@android:color/transparent"
+            android:hint="@string/search_hint_vehicle"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_tertiary"
+            android:textSize="@dimen/text_body"
+            android:inputType="text"
+            android:autofillHints="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/space_l"
+        android:layout_marginEnd="@dimen/space_l"
+        android:layout_marginBottom="@dimen/space_m">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_incidents"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/space_s"
+            android:text="@string/vehicles_btn_incidents"
+            android:textSize="@dimen/text_body"
+            app:icon="@drawable/ic_warning"
+            app:iconGravity="textStart"
+            app:cornerRadius="@dimen/radius_m" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_entretiens"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/space_s"
+            android:text="@string/vehicles_btn_entretiens"
+            android:textSize="@dimen/text_body"
+            app:icon="@drawable/ic_wrench"
+            app:iconGravity="textStart"
+            app:cornerRadius="@dimen/radius_m" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_vehicles"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/space_l"
+        android:paddingEnd="@dimen/space_l"
+        android:paddingBottom="@dimen/space_l" />
+</LinearLayout>

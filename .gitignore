@@ -1,0 +1,18 @@
+# Android
+build/
+.gradle/
+local.properties
+*.iml
+.idea/
+app/src/main/res/values/strings.xml
+
+# Java / Maven
+target/
+*.class
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db

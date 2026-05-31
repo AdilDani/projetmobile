@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg">
+
+    <include layout="@layout/toolbar_back" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_l">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_card"
+                android:padding="@dimen/space_l"
+                android:elevation="@dimen/elevation_card">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/detail_image_h"
+                    android:src="@drawable/ic_truck"
+                    android:tint="@color/text_secondary"
+                    android:contentDescription="@string/cd_vehicle_image" />
+
+                <TextView
+                    android:id="@+id/text_vehicle_name"
+                    style="@style/TextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_s"
+                    android:text="@string/app_name" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/details_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/space_l"
+                android:background="@drawable/bg_card"
+                android:padding="@dimen/space_l"
+                android:elevation="@dimen/elevation_card" />
+
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assigned_driver" />
+
+            <LinearLayout
+                android:id="@+id/driver_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_card_clickable"
+                android:padding="@dimen/space_l"
+                android:elevation="@dimen/elevation_card">
+
+                <ImageView
+                    android:layout_width="@dimen/avatar_m"
+                    android:layout_height="@dimen/avatar_m"
+                    android:background="@drawable/bg_circle_pale"
+                    android:padding="@dimen/space_m"
+                    android:src="@drawable/ic_person"
+                    android:tint="@color/primary"
+                    android:contentDescription="@string/cd_avatar" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/space_m"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/driver_name"
+                        style="@style/TextBody"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/assigned_driver" />
+
+                    <TextView
+                        android:id="@+id/driver_phone"
+                        style="@style/TextSecondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_phone" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/icon_m"
+                    android:layout_height="@dimen/icon_m"
+                    android:src="@drawable/ic_chevron_right"
+                    android:tint="@color/text_tertiary" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_see_map"
+                style="@style/PrimaryButton"
+                android:layout_marginTop="@dimen/space_l"
+                app:icon="@drawable/ic_map_pin"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white"
+                android:text="@string/see_on_map" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

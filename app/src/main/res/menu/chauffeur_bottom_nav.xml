@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_accueil" android:icon="@drawable/ic_home" android:title="@string/nav_accueil" />
+    <item android:id="@+id/nav_position" android:icon="@drawable/ic_location" android:title="@string/nav_position" />
+    <item android:id="@+id/nav_vehicule" android:icon="@drawable/ic_truck" android:title="@string/nav_vehicule" />
+    <item android:id="@+id/nav_profil" android:icon="@drawable/ic_person" android:title="@string/nav_profil" />
+</menu>

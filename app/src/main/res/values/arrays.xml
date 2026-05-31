@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="incident_types">
+        <item>@string/incident_type_mechanical</item>
+        <item>@string/incident_type_accident</item>
+        <item>@string/incident_type_tire</item>
+        <item>@string/incident_type_glass</item>
+        <item>@string/incident_type_other</item>
+    </string-array>
+</resources>

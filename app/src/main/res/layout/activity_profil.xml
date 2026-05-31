@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg">
+
+    <include layout="@layout/toolbar_back" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_header"
+                android:paddingTop="@dimen/space_xl"
+                android:paddingBottom="@dimen/space_xxl"
+                android:paddingStart="@dimen/space_l"
+                android:paddingEnd="@dimen/space_l">
+
+                <ImageView
+                    android:layout_width="@dimen/avatar_l"
+                    android:layout_height="@dimen/avatar_l"
+                    android:background="@drawable/bg_circle_white"
+                    android:padding="@dimen/space_l"
+                    android:src="@drawable/ic_person"
+                    android:tint="@color/primary"
+                    android:contentDescription="@string/cd_avatar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_m"
+                    style="@style/TextTitle"
+                    android:textColor="@color/white"
+                    android:text="@string/admin_name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/admin_role"
+                    android:textColor="@color/text_on_primary_muted"
+                    android:textSize="@dimen/text_body" />
+            </LinearLayout>
+
+            <!-- Menu -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/space_l"
+                android:background="@drawable/bg_card"
+                android:padding="@dimen/space_xs"
+                android:elevation="@dimen/elevation_card">
+
+                <include layout="@layout/item_profile_menu" android:id="@+id/row_personal" />
+                <include layout="@layout/item_profile_menu" android:id="@+id/row_settings" />
+                <include layout="@layout/item_profile_menu" android:id="@+id/row_notifications" />
+                <include layout="@layout/item_profile_menu" android:id="@+id/row_help" />
+                <include layout="@layout/item_profile_menu" android:id="@+id/row_logout" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

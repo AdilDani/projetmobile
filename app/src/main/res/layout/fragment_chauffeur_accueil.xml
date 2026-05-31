@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Blue header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_header"
+            android:paddingStart="@dimen/space_xl"
+            android:paddingEnd="@dimen/space_xl"
+            android:paddingTop="@dimen/space_xl"
+            android:paddingBottom="@dimen/space_xxl">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/ToolbarTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chauffeur_header_title" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chauffeur_header_sub"
+                        android:textColor="@color/text_on_primary_muted"
+                        android:textSize="@dimen/text_small" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_m"
+                        android:layout_height="@dimen/icon_m"
+                        android:layout_margin="@dimen/space_xs"
+                        android:src="@drawable/ic_bell"
+                        android:tint="@color/white"
+                        android:contentDescription="@string/cd_notifications" />
+
+                    <TextView
+                        android:layout_width="@dimen/badge_s"
+                        android:layout_height="@dimen/badge_s"
+                        android:layout_gravity="top|end"
+                        android:background="@drawable/bg_badge_red"
+                        android:gravity="center"
+                        android:text="@string/notif_badge_sample"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_micro"
+                        android:textStyle="bold" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/space_xl">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text_greeting"
+                        style="@style/TextHeadline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="@string/greeting_welcome" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/greeting_welcome"
+                        android:textColor="@color/text_on_primary_muted"
+                        android:textSize="@dimen/text_body" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/avatar_m"
+                    android:layout_height="@dimen/avatar_m"
+                    android:background="@drawable/bg_circle_white"
+                    android:padding="@dimen/space_s"
+                    android:src="@drawable/ic_person"
+                    android:tint="@color/primary"
+                    android:contentDescription="@string/cd_avatar" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_l">
+
+            <!-- Vehicule affecté -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card"
+                android:padding="@dimen/space_l"
+                android:elevation="@dimen/elevation_card">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_s"
+                        android:layout_height="@dimen/icon_s"
+                        android:src="@drawable/ic_truck"
+                        android:tint="@color/primary" />
+
+                    <TextView
+                        style="@style/TextSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_s"
+                        android:text="@string/assigned_vehicle_card" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/space_m">
+
+                    <ImageView
+                        android:layout_width="@dimen/vehicle_thumb_w"
+                        android:layout_height="@dimen/vehicle_thumb_h"
+                        android:background="@drawable/bg_vehicle_thumb"
+                        android:padding="@dimen/space_m"
+                        android:src="@drawable/ic_truck"
+                        android:tint="@color/text_secondary"
+                        android:contentDescription="@string/cd_vehicle_image" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/space_l"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text_vehicle_name"
+                            style="@style/TextSubtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/app_name" />
+
+                        <TextView
+                            android:id="@+id/text_vehicle_plate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_xs"
+                            android:background="@drawable/bg_pill_primary"
+                            android:paddingStart="@dimen/space_m"
+                            android:paddingEnd="@dimen/space_m"
+                            android:paddingTop="@dimen/space_xs"
+                            android:paddingBottom="@dimen/space_xs"
+                            android:text="@string/label_plate"
+                            android:textColor="@color/primary"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_small" />
+
+                        <TextView
+                            style="@style/TextCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_s"
+                            android:text="@string/label_mileage" />
+
+                        <TextView
+                            android:id="@+id/text_vehicle_km"
+                            style="@style/TextBody"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="@string/label_mileage" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Mission du jour -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/space_l"
+                android:background="@drawable/bg_card"
+                android:padding="@dimen/space_l"
+                android:elevation="@dimen/elevation_card">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_s"
+                        android:layout_height="@dimen/icon_s"
+                        android:src="@drawable/ic_calendar"
+                        android:tint="@color/primary" />
+
+                    <TextView
+                        style="@style/TextSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_s"
+                        android:text="@string/mission_today" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/space_m">
+
+                    <TextView
+                        style="@style/TextSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary"
+                        android:text="@string/loc_rabat" />
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_s"
+                        android:layout_height="@dimen/icon_s"
+                        android:layout_marginStart="@dimen/space_s"
+                        android:layout_marginEnd="@dimen/space_s"
+                        android:src="@drawable/ic_chevron_right"
+                        android:tint="@color/text_secondary" />
+
+                    <TextView
+                        style="@style/TextSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/loc_casablanca" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/space_s">
+
+                    <TextView
+                        style="@style/TextSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/primary"
+                        android:text="@string/mission_depart_sample" />
+
+                    <TextView
+                        style="@style/TextSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/primary"
+                        android:text="@string/mission_arrival_sample" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_start_trip"
+                    style="@style/PrimaryButton"
+                    android:layout_marginTop="@dimen/space_l"
+                    app:icon="@drawable/ic_play"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    android:text="@string/start_trip" />
+            </LinearLayout>
+
+            <!-- Raccourcis -->
+            <TextView
+                style="@style/SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shortcuts" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/shortcut_position"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_card"
+                    android:padding="@dimen/space_m"
+                    android:layout_marginEnd="@dimen/space_s">
+
+                    <ImageView
+                        android:layout_width="@dimen/shortcut_icon_box"
+                        android:layout_height="@dimen/shortcut_icon_box"
+                        android:background="@drawable/bg_shortcut_blue"
+                        android:padding="@dimen/space_m"
+                        android:src="@drawable/ic_location"
+                        android:tint="@color/primary" />
+
+                    <TextView
+                        style="@style/TextCaption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_s"
+                        android:textColor="@color/text_primary"
+                        android:text="@string/shortcut_position" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shortcut_incident"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_card"
+                    android:padding="@dimen/space_m"
+                    android:layout_marginEnd="@dimen/space_s">
+
+                    <ImageView
+                        android:layout_width="@dimen/shortcut_icon_box"
+                        android:layout_height="@dimen/shortcut_icon_box"
+                        android:background="@drawable/bg_shortcut_red"
+                        android:padding="@dimen/space_m"
+                        android:src="@drawable/ic_warning"
+                        android:tint="@color/danger" />
+
+                    <TextView
+                        style="@style/TextCaption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_s"
+                        android:textColor="@color/text_primary"
+                        android:text="@string/shortcut_incident" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shortcut_maintenance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_card"
+                    android:padding="@dimen/space_m"
+                    android:layout_marginEnd="@dimen/space_s">
+
+                    <ImageView
+                        android:layout_width="@dimen/shortcut_icon_box"
+                        android:layout_height="@dimen/shortcut_icon_box"
+                        android:background="@drawable/bg_shortcut_orange"
+                        android:padding="@dimen/space_m"
+                        android:src="@drawable/ic_wrench"
+                        android:tint="@color/warning" />
+
+                    <TextView
+                        style="@style/TextCaption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_s"
+                        android:textColor="@color/text_primary"
+                        android:text="@string/shortcut_maintenance" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shortcut_consumption"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_card"
+                    android:padding="@dimen/space_m">
+
+                    <ImageView
+                        android:layout_width="@dimen/shortcut_icon_box"
+                        android:layout_height="@dimen/shortcut_icon_box"
+                        android:background="@drawable/bg_shortcut_green"
+                        android:padding="@dimen/space_m"
+                        android:src="@drawable/ic_fuel"
+                        android:tint="@color/success" />
+
+                    <TextView
+                        style="@style/TextCaption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_s"
+                        android:textColor="@color/text_primary"
+                        android:text="@string/shortcut_consumption" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
