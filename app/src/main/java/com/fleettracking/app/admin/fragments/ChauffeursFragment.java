@@ -1,5 +1,6 @@
 package com.fleettracking.app.admin.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fleettracking.app.R;
+import com.fleettracking.app.admin.AddChauffeurActivity;
 import com.fleettracking.app.admin.ChauffeurDetailsActivity;
 import com.fleettracking.app.admin.ProfilActivity;
 import com.fleettracking.app.adapters.ChauffeurAdapter;
@@ -34,6 +38,17 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
     private final List<Chauffeur> all = new ArrayList<>();
     private final List<Chauffeur> filtered = new ArrayList<>();
     private ChauffeurAdapter adapter;
+    private EditText searchInput;
+    private Repository repo;
+
+    private final ActivityResultLauncher<Intent> chauffeurLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    loadChauffeurs(); // Refresh list on add/update/delete
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -45,8 +60,18 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
+        repo = new Repository(requireContext());
 
         ((TextView) v.findViewById(R.id.toolbar_title)).setText(R.string.nav_chauffeurs);
+        
+        // Configuration du bouton "+" pour ajouter un chauffeur
+        View action = v.findViewById(R.id.btn_action);
+        action.setVisibility(View.VISIBLE);
+        action.setOnClickListener(x -> {
+            Intent i = new Intent(getContext(), AddChauffeurActivity.class);
+            chauffeurLauncher.launch(i);
+        });
+
         v.findViewById(R.id.btn_profile).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), ProfilActivity.class)));
 
@@ -55,18 +80,22 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);
 
-        EditText search = v.findViewById(R.id.input_search);
-        search.addTextChangedListener(new TextWatcher() {
+        searchInput = v.findViewById(R.id.input_search);
+        searchInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) { filter(s.toString()); }
             @Override public void afterTextChanged(Editable s) {}
         });
 
-        new Repository(requireContext()).getChauffeurs(new RepoCallback<List<Chauffeur>>() {
+        loadChauffeurs();
+    }
+
+    private void loadChauffeurs() {
+        repo.getChauffeurs(new RepoCallback<List<Chauffeur>>() {
             @Override public void onResult(List<Chauffeur> list) {
                 all.clear();
                 all.addAll(list);
-                filter(search.getText().toString());
+                filter(searchInput.getText().toString());
             }
             @Override public void onError(String message) { /* empty list */ }
         });
@@ -88,7 +117,7 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
     public void onClick(Chauffeur c) {
         Intent i = new Intent(getContext(), ChauffeurDetailsActivity.class);
         i.putExtra(ChauffeurDetailsActivity.EXTRA_CHAUFFEUR_ID, c.id);
-        startActivity(i);
+        chauffeurLauncher.launch(i); // Utilise le launcher pour rafraîchir au retour
     }
 
     @Override

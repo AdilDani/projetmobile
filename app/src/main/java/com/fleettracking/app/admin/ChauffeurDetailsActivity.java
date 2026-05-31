@@ -1,10 +1,14 @@
 package com.fleettracking.app.admin;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fleettracking.app.R;
@@ -19,6 +23,7 @@ public class ChauffeurDetailsActivity extends AppCompatActivity {
 
     private Repository repo;
     private Chauffeur current;
+    private String chauffeurId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +31,48 @@ public class ChauffeurDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chauffeur_details);
 
         repo = new Repository(this);
+        chauffeurId = getIntent().getStringExtra(EXTRA_CHAUFFEUR_ID);
+        if (chauffeurId == null) chauffeurId = "c1";
 
         ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.chauffeur_details_title);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
 
-        String id = getIntent().getStringExtra(EXTRA_CHAUFFEUR_ID);
-        repo.getChauffeur(id == null ? "c1" : id, new RepoCallback<Chauffeur>() {
+        // Bouton supprimer dans la toolbar
+        ImageView btnDelete = findViewById(R.id.btn_delete);
+        btnDelete.setVisibility(View.VISIBLE);
+        btnDelete.setOnClickListener(v -> showDeleteConfirmation());
+
+        refresh();
+    }
+
+    private void refresh() {
+        repo.getChauffeur(chauffeurId, new RepoCallback<Chauffeur>() {
             @Override public void onResult(Chauffeur c) { current = c; bind(c); }
             @Override public void onError(String message) {
+                Toast.makeText(ChauffeurDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showDeleteConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Supprimer le chauffeur")
+                .setMessage("Êtes-vous sûr de vouloir supprimer ce chauffeur ?")
+                .setPositiveButton("Supprimer", (dialog, which) -> deleteChauffeur())
+                .setNegativeButton("Annuler", null)
+                .show();
+    }
+
+    private void deleteChauffeur() {
+        repo.deleteChauffeur(chauffeurId, new RepoCallback<Void>() {
+            @Override
+            public void onResult(Void result) {
+                Toast.makeText(ChauffeurDetailsActivity.this, "Chauffeur supprimé", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
+                finish();
+            }
+            @Override
+            public void onError(String message) {
                 Toast.makeText(ChauffeurDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
@@ -73,6 +112,7 @@ public class ChauffeurDetailsActivity extends AppCompatActivity {
                 @Override public void onResult(Chauffeur saved) {
                     ((TextView) findViewById(R.id.text_chauffeur_name)).setText(saved.nom);
                     Toast.makeText(ChauffeurDetailsActivity.this, R.string.saved_toast, Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                 }
                 @Override public void onError(String message) {
                     Toast.makeText(ChauffeurDetailsActivity.this, message, Toast.LENGTH_SHORT).show();

@@ -218,6 +218,10 @@ public class Repository {
         enqueueObject(api.updateChauffeur(id, c), cb);
     }
 
+    public void deleteChauffeur(String id, RepoCallback<Void> cb) {
+        enqueueVoid(api.deleteChauffeur(id), cb);
+    }
+
     public void createEntretien(Entretien e, RepoCallback<Entretien> cb) {
         enqueueObject(api.createEntretien(e), cb);
     }
