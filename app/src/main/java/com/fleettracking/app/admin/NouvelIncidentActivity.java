@@ -1,4 +1,4 @@
-package com.fleettracking.app.admin;
+/*package com.fleettracking.app.admin;
 
 import android.os.Bundle;
 import android.widget.EditText;
@@ -51,3 +51,4 @@ public class NouvelIncidentActivity extends AppCompatActivity {
         });
     }
 }
+*/

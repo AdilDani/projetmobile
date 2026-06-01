@@ -16,10 +16,16 @@ import java.util.List;
 
 public class IncidentAdapter extends RecyclerView.Adapter<IncidentAdapter.VH> {
 
-    private final List<Incident> items;
+    public interface OnIncidentClickListener {
+        void onIncidentClick(Incident incident);
+    }
 
-    public IncidentAdapter(List<Incident> items) {
+    private final List<Incident> items;
+    private final OnIncidentClickListener listener;
+
+    public IncidentAdapter(List<Incident> items, OnIncidentClickListener listener) {
         this.items = items;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,6 +44,10 @@ public class IncidentAdapter extends RecyclerView.Adapter<IncidentAdapter.VH> {
         h.description.setText(in.description);
         h.date.setText(in.date);
         UiUtils.applyStatusChip(h.status, in.statut);
+        
+        h.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onIncidentClick(in);
+        });
     }
 
     @Override

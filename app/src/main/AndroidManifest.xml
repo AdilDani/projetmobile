@@ -53,6 +53,7 @@
         <activity android:name=".admin.AddVehiculeActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".admin.EditVehiculeActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".admin.AddChauffeurActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
+        <activity android:name=".admin.IncidentDetailsActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
 
     </application>
 </manifest>

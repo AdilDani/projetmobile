@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -26,8 +27,10 @@ import com.fleettracking.app.model.Vehicule;
 import com.fleettracking.app.util.NotificationHelper;
 import com.fleettracking.app.util.Prefs;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,9 +38,8 @@ import java.util.Locale;
 import retrofit2.Response;
 
 /**
- * Declares an incident. Demonstrates an implicit Intent (camera capture),
- * runtime permissions and an AsyncTask that performs the Retrofit upload of
- * the incident to the backend on a background thread.
+ * Declares an incident. Handles camera capture and uploads the incident
+ * with the driver's name and photos (Base64) to the backend.
  */
 public class DeclarerIncidentActivity extends AppCompatActivity {
 
@@ -48,6 +50,7 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
     private ImageView imagePhoto;
     private Spinner spinnerType;
     private EditText inputDescription;
+    private Bitmap capturedBitmap = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +79,20 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
             String type = spinnerType.getSelectedItem() != null
                     ? spinnerType.getSelectedItem().toString() : "";
             String desc = inputDescription.getText().toString().trim();
-            String chauffeurId = new Prefs(this).getUserId();
-            new SendIncidentTask(this, chauffeurId, type, desc).execute();
+            
+            Prefs prefs = new Prefs(this);
+            String chauffeurId = prefs.getUserId();
+            String chauffeurNom = prefs.getName();
+
+            String photoBase64 = null;
+            if (capturedBitmap != null) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                capturedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                byte[] b = baos.toByteArray();
+                photoBase64 = "data:image/jpeg;base64," + Base64.encodeToString(b, Base64.NO_WRAP);
+            }
+
+            new SendIncidentTask(this, chauffeurId, chauffeurNom, type, desc, photoBase64).execute();
         });
     }
 
@@ -117,7 +132,8 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
             Bundle extras = data.getExtras();
             if (extras != null && extras.get("data") instanceof Bitmap) {
-                imagePhoto.setImageBitmap((Bitmap) extras.get("data"));
+                capturedBitmap = (Bitmap) extras.get("data");
+                imagePhoto.setImageBitmap(capturedBitmap);
                 imagePhoto.clearColorFilter();
             }
         }
@@ -127,14 +143,19 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
     private static class SendIncidentTask extends AsyncTask<Void, Void, Boolean> {
         private final WeakReference<DeclarerIncidentActivity> ref;
         private final String chauffeurId;
+        private final String chauffeurNom;
         private final String type;
         private final String description;
+        private final String photoBase64;
 
-        SendIncidentTask(DeclarerIncidentActivity a, String chauffeurId, String type, String description) {
+        SendIncidentTask(DeclarerIncidentActivity a, String chauffeurId, String chauffeurNom, 
+                         String type, String description, String photoBase64) {
             this.ref = new WeakReference<>(a);
             this.chauffeurId = chauffeurId;
+            this.chauffeurNom = chauffeurNom;
             this.type = type;
             this.description = description;
+            this.photoBase64 = photoBase64;
         }
 
         @Override
@@ -154,7 +175,13 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
                     }
                 }
                 String today = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
-                Incident incident = new Incident(null, vehName, plate, type, description, today, "En cours");
+                
+                List<String> photos = new ArrayList<>();
+                if (photoBase64 != null) {
+                    photos.add(photoBase64);
+                }
+
+                Incident incident = new Incident(null, vehName, plate, type, description, today, "En cours", chauffeurNom, photos);
                 Response<Incident> r = ApiClient.get().createIncident(incident).execute();
                 return r.isSuccessful();
             } catch (Exception e) {

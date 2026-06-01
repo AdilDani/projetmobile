@@ -37,13 +37,11 @@ public class IncidentsActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.incidents_title);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
-        ImageView action = findViewById(R.id.btn_action);
-        action.setVisibility(View.VISIBLE);
-        action.setImageResource(R.drawable.ic_plus);
-        action.setOnClickListener(v ->
-                startActivity(new Intent(this, NouvelIncidentActivity.class)));
+        
+        // On masque le bouton d'ajout car les incidents sont créés uniquement par les chauffeurs
+        findViewById(R.id.btn_action).setVisibility(View.GONE);
 
-        adapter = new IncidentAdapter(shown);
+        adapter = new IncidentAdapter(shown, this::openIncidentDetails);
         RecyclerView rv = findViewById(R.id.recycler_incidents);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
@@ -59,10 +57,15 @@ public class IncidentsActivity extends AppCompatActivity {
         });
     }
 
+    private void openIncidentDetails(Incident incident) {
+        Intent intent = new Intent(this, IncidentDetailsActivity.class);
+        intent.putExtra("incident_id", incident.id);
+        startActivity(intent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh on resume so a newly declared incident shows up.
         repo.getIncidents(new RepoCallback<List<Incident>>() {
             @Override public void onResult(List<Incident> list) {
                 all.clear();
