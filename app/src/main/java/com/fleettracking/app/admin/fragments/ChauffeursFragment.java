@@ -1,5 +1,6 @@
 package com.fleettracking.app.admin.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -35,6 +38,18 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
     private final List<Chauffeur> filtered = new ArrayList<>();
     private ChauffeurAdapter adapter;
     private EditText search;
+    private Repository repo;
+
+    // Refresh the list only when a chauffeur edit actually completed (RESULT_OK),
+    // not on every back navigation.
+    private final ActivityResultLauncher<Intent> detailsLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    load();
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -46,6 +61,7 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
+        repo = new Repository(requireContext());
 
         ((TextView) v.findViewById(R.id.toolbar_title)).setText(R.string.nav_chauffeurs);
         v.findViewById(R.id.btn_profile).setOnClickListener(x ->
@@ -62,22 +78,18 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) { filter(s.toString()); }
             @Override public void afterTextChanged(Editable s) {}
         });
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
         load();
     }
 
     private void load() {
-        new Repository(requireContext()).getChauffeurs(new RepoCallback<List<Chauffeur>>() {
+        repo.getChauffeurs(new RepoCallback<List<Chauffeur>>() {
             @Override public void onResult(List<Chauffeur> list) {
                 all.clear();
                 all.addAll(list);
                 filter(search.getText().toString());
             }
-            @Override public void onError(String message) { /* empty list */ }
+            @Override public void onError(String message) { /* keep current list */ }
         });
     }
 
@@ -97,7 +109,7 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
     public void onClick(Chauffeur c) {
         Intent i = new Intent(getContext(), ChauffeurDetailsActivity.class);
         i.putExtra(ChauffeurDetailsActivity.EXTRA_CHAUFFEUR_ID, c.id);
-        startActivity(i);
+        detailsLauncher.launch(i);
     }
 
     @Override
