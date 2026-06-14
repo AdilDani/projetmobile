@@ -15,10 +15,14 @@ import java.util.List;
 
 public class TrajetAdapter extends RecyclerView.Adapter<TrajetAdapter.VH> {
 
-    private final List<Trajet> items;
+    public interface OnTrajetClick { void onClick(Trajet t); }
 
-    public TrajetAdapter(List<Trajet> items) {
+    private final List<Trajet> items;
+    private final OnTrajetClick listener;
+
+    public TrajetAdapter(List<Trajet> items, OnTrajetClick listener) {
         this.items = items;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,12 +40,10 @@ public class TrajetAdapter extends RecyclerView.Adapter<TrajetAdapter.VH> {
         h.vehicle.setText(t.vehiculeNom);
         h.distance.setText(t.distanceKm + " km");
         h.consumption.setText(String.format("%.1f L/100km", t.consommation));
+        h.itemView.setOnClickListener(v -> { if (listener != null) listener.onClick(t); });
     }
 
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
+    @Override public int getItemCount() { return items.size(); }
 
     static class VH extends RecyclerView.ViewHolder {
         TextView date, vehicle, distance, consumption;

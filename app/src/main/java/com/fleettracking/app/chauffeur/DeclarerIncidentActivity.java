@@ -4,35 +4,31 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
+import android.util.Base64;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.fleettracking.app.R;
 import com.fleettracking.app.data.ApiClient;
+import com.fleettracking.app.model.Chauffeur;
 import com.fleettracking.app.model.Incident;
 import com.fleettracking.app.model.Vehicule;
-import com.fleettracking.app.util.ImageUtils;
 import com.fleettracking.app.util.NotificationHelper;
 import com.fleettracking.app.util.Prefs;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,20 +44,10 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 102;
     private static final int REQUEST_NOTIF_PERMISSION = 103;
 
-    private LinearLayout photosContainer;
+    private ImageView imagePhoto;
     private Spinner spinnerType;
     private EditText inputDescription;
-    private final List<String> imagesBase64 = new ArrayList<>();
-
-    private final ActivityResultLauncher<String> galleryLauncher = registerForActivityResult(
-            new ActivityResultContracts.GetContent(),
-            uri -> {
-                if (uri != null) {
-                    String base64 = ImageUtils.encodeFromUri(this, uri);
-                    if (base64 != null) addPhoto(base64);
-                }
-            }
-    );
+    private Bitmap capturedBitmap = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +57,12 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.declare_incident_title);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
 
-        photosContainer = findViewById(R.id.photos_container);
+        imagePhoto = findViewById(R.id.image_photo);
         spinnerType = findViewById(R.id.spinner_type);
         inputDescription = findViewById(R.id.input_description);
 
-        findViewById(R.id.btn_add_photo).setOnClickListener(v -> showImageSourceDialog());
+        findViewById(R.id.btn_add_photo).setOnClickListener(v -> requestCamera());
+        imagePhoto.setOnClickListener(v -> requestCamera());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
@@ -89,18 +76,17 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
                     ? spinnerType.getSelectedItem().toString() : "";
             String desc = inputDescription.getText().toString().trim();
             String chauffeurId = new Prefs(this).getUserId();
-            new SendIncidentTask(this, chauffeurId, type, desc, new ArrayList<>(imagesBase64)).execute();
-        });
-    }
 
-    private void showImageSourceDialog() {
-        String[] options = {"Appareil photo", "Galerie"};
-        new AlertDialog.Builder(this)
-                .setTitle("Ajouter une photo")
-                .setItems(options, (dialog, which) -> {
-                    if (which == 0) requestCamera();
-                    else galleryLauncher.launch("image/*");
-                }).show();
+            String photoBase64 = null;
+            if (capturedBitmap != null) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                capturedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                photoBase64 = "data:image/jpeg;base64,"
+                        + Base64.encodeToString(baos.toByteArray(), Base64.NO_WRAP);
+            }
+
+            new SendIncidentTask(this, chauffeurId, type, desc, photoBase64).execute();
+        });
     }
 
     private void requestCamera() {
@@ -114,11 +100,11 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
     }
 
     private void launchCamera() {
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePicture.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (i.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(i, REQUEST_IMAGE_CAPTURE);
         } else {
-            Toast.makeText(this, "Caméra non disponible", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.cd_camera, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -139,28 +125,11 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
             Bundle extras = data.getExtras();
             if (extras != null && extras.get("data") instanceof Bitmap) {
-                String base64 = ImageUtils.encode((Bitmap) extras.get("data"));
-                if (base64 != null) addPhoto(base64);
+                capturedBitmap = (Bitmap) extras.get("data");
+                imagePhoto.setImageBitmap(capturedBitmap);
+                imagePhoto.clearColorFilter();
             }
         }
-    }
-
-    private void addPhoto(String base64) {
-        imagesBase64.add(base64);
-        
-        View v = getLayoutInflater().inflate(R.layout.view_incident_photo_item, photosContainer, false);
-        ImageView img = v.findViewById(R.id.img_thumbnail);
-        ImageUtils.bind(img, base64, R.drawable.ic_camera);
-        
-        v.findViewById(R.id.btn_remove).setOnClickListener(x -> {
-            int idx = photosContainer.indexOfChild(v) - 1; // -1 because btn_add_photo is first
-            if (idx >= 0) {
-                imagesBase64.remove(idx);
-                photosContainer.removeView(v);
-            }
-        });
-        
-        photosContainer.addView(v);
     }
 
     private static class SendIncidentTask extends AsyncTask<Void, Void, Boolean> {
@@ -168,51 +137,43 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
         private final String chauffeurId;
         private final String type;
         private final String description;
-        private final List<String> images;
+        private final String photoBase64;
 
-        SendIncidentTask(DeclarerIncidentActivity a, String chauffeurId, String type, 
-                         String description, List<String> images) {
+        SendIncidentTask(DeclarerIncidentActivity a, String chauffeurId,
+                         String type, String description, String photoBase64) {
             this.ref = new WeakReference<>(a);
             this.chauffeurId = chauffeurId;
             this.type = type;
             this.description = description;
-            this.images = images;
+            this.photoBase64 = photoBase64;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                String vehId = "";
-                String vehName = "";
-                String plate = "";
                 String chauffeurNom = "";
+                String vehId = "", vehName = "", plate = "";
 
-                // Get chauffeur info
                 Response<List<Chauffeur>> cr = ApiClient.get().getChauffeurs().execute();
                 if (cr.isSuccessful() && cr.body() != null) {
                     for (Chauffeur c : cr.body()) {
-                        if (chauffeurId.equals(c.id)) {
-                            chauffeurNom = c.nom;
-                            break;
-                        }
+                        if (chauffeurId.equals(c.id)) { chauffeurNom = c.nom; break; }
                     }
                 }
 
-                // Find vehicle
                 Response<List<Vehicule>> vr = ApiClient.get().getVehicules().execute();
                 if (vr.isSuccessful() && vr.body() != null) {
                     for (Vehicule v : vr.body()) {
                         if (chauffeurId.equals(v.conducteurId)) {
-                            vehId = v.id;
-                            vehName = v.getNomComplet();
-                            plate = v.immatriculation;
+                            vehId = v.id; vehName = v.getNomComplet(); plate = v.immatriculation;
                             break;
                         }
                     }
                 }
-                
-                String today = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
-                
+
+                List<String> images = new ArrayList<>();
+                if (photoBase64 != null) images.add(photoBase64);
+
                 Incident incident = new Incident();
                 incident.chauffeurId = chauffeurId;
                 incident.chauffeurNom = chauffeurNom;
@@ -221,12 +182,11 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
                 incident.immatriculation = plate;
                 incident.type = type;
                 incident.description = description;
-                incident.date = today;
+                incident.date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
                 incident.statut = "En cours";
                 incident.images = images;
 
-                Response<Incident> r = ApiClient.get().createIncident(incident).execute();
-                return r.isSuccessful();
+                return ApiClient.get().createIncident(incident).execute().isSuccessful();
             } catch (Exception e) {
                 return false;
             }

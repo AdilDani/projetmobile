@@ -32,6 +32,9 @@ public class Trajet {
     private double departLng;
     private double arriveeLat;
     private double arriveeLng;
+    // JSON array of [[lat,lng],...] waypoints recorded during the trip
+    @Column(columnDefinition = "text")
+    private String waypoints;
 
     public Trajet() {}
 
@@ -76,4 +79,6 @@ public class Trajet {
     public void setArriveeLat(double arriveeLat) { this.arriveeLat = arriveeLat; }
     public double getArriveeLng() { return arriveeLng; }
     public void setArriveeLng(double arriveeLng) { this.arriveeLng = arriveeLng; }
+    public String getWaypoints() { return waypoints; }
+    public void setWaypoints(String waypoints) { this.waypoints = waypoints; }
 }

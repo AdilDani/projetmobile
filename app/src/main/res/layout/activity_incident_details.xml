@@ -107,10 +107,25 @@
                     android:text="@string/nav_chauffeurs" />
 
                 <ImageView
-                    android:layout_width="@dimen/icon_m"
-                    android:layout_height="@dimen/icon_m"
-                    android:src="@drawable/ic_chevron_right"
-                    android:tint="@color/text_tertiary" />
+                    android:id="@+id/btn_call_chauffeur"
+                    android:layout_width="@dimen/avatar_s"
+                    android:layout_height="@dimen/avatar_s"
+                    android:background="@drawable/bg_circle_pale"
+                    android:padding="@dimen/space_s"
+                    android:src="@drawable/ic_phone"
+                    android:tint="@color/primary"
+                    android:contentDescription="@string/cd_call" />
+
+                <ImageView
+                    android:id="@+id/btn_sms_chauffeur"
+                    android:layout_width="@dimen/avatar_s"
+                    android:layout_height="@dimen/avatar_s"
+                    android:layout_marginStart="@dimen/space_s"
+                    android:background="@drawable/bg_circle_pale"
+                    android:padding="@dimen/space_s"
+                    android:src="@drawable/ic_sms"
+                    android:tint="@color/primary"
+                    android:contentDescription="@string/sms" />
             </LinearLayout>
 
             <!-- Vehicle Link -->

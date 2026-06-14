@@ -1,8 +1,12 @@
 package com.fleettracking.app.admin;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -69,6 +73,12 @@ public class IncidentDetailsActivity extends AppCompatActivity {
                         i.putExtra(ChauffeurDetailsActivity.EXTRA_CHAUFFEUR_ID, c.id);
                         startActivity(i);
                     });
+                    findViewById(R.id.btn_call_chauffeur).setOnClickListener(v ->
+                            startActivity(new Intent(Intent.ACTION_DIAL,
+                                    Uri.parse("tel:" + c.telephone))));
+                    findViewById(R.id.btn_sms_chauffeur).setOnClickListener(v ->
+                            startActivity(new Intent(Intent.ACTION_SENDTO,
+                                    Uri.parse("smsto:" + c.telephone))));
                 }
                 @Override public void onError(String message) {}
             });
@@ -105,20 +115,34 @@ public class IncidentDetailsActivity extends AppCompatActivity {
                 img.setClipToOutline(true);
                 img.setElevation(4);
                 ImageUtils.bind(img, base64, R.drawable.ic_camera);
-                
-                // Clicking opens "gallery view" (just Toast for now or we could make a simple dialog)
-                img.setOnClickListener(v -> {
-                    // Simple full screen dialog or just a toast
-                    Toast.makeText(this, "Agrandir l'image", Toast.LENGTH_SHORT).show();
-                });
-                
+
+                final String full = base64;
+                img.setOnClickListener(v -> showFullImage(full));
+
                 photosContainer.addView(img);
             }
         } else {
             TextView tv = new TextView(this);
-            tv.setText("Aucune photo disponible");
-            tv.setPadding(32, 32, 32, 32);
+            tv.setText(R.string.no_photo_available);
+            int pad = getResources().getDimensionPixelSize(R.dimen.space_l);
+            tv.setPadding(pad, pad, pad, pad);
             photosContainer.addView(tv);
         }
+    }
+
+    private void showFullImage(String base64) {
+        Bitmap bmp = ImageUtils.decode(base64);
+        if (bmp == null) return;
+
+        ImageView full = new ImageView(this);
+        full.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        full.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        full.setImageBitmap(bmp);
+
+        Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.setContentView(full);
+        full.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 }

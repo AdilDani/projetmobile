@@ -41,6 +41,7 @@
         <activity android:name=".chauffeur.ChauffeurMainActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".chauffeur.DeclarerIncidentActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".chauffeur.HistoriqueActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
+        <activity android:name=".chauffeur.TrajetMapActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
 
         <!-- Admin space -->
         <activity android:name=".admin.AdminMainActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
@@ -50,6 +51,10 @@
         <activity android:name=".admin.NouvelIncidentActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".admin.EntretiensActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".admin.ProfilActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
+        <activity android:name=".admin.IncidentDetailsActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
+        <activity android:name=".admin.EditProfileActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
+        <activity android:name=".admin.SettingsActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
+        <activity android:name=".admin.HelpActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
 
     </application>
 </manifest>

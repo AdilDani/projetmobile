@@ -52,8 +52,11 @@ public class VehiculesFragment extends Fragment {
         ((TextView) v.findViewById(R.id.toolbar_title)).setText(R.string.nav_vehicules);
         View action = v.findViewById(R.id.btn_action);
         action.setVisibility(View.VISIBLE);
-        action.setOnClickListener(x ->
-                Toast.makeText(getContext(), R.string.add, Toast.LENGTH_SHORT).show());
+        action.setOnClickListener(x -> {
+            Intent i = new Intent(getContext(), VehiculeDetailsActivity.class);
+            i.putExtra(VehiculeDetailsActivity.EXTRA_NEW, true);
+            startActivity(i);
+        });
         v.findViewById(R.id.btn_profile).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), ProfilActivity.class)));
 

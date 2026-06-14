@@ -37,11 +37,8 @@ public class IncidentsActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.incidents_title);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
-        ImageView action = findViewById(R.id.btn_action);
-        action.setVisibility(View.VISIBLE);
-        action.setImageResource(R.drawable.ic_plus);
-        action.setOnClickListener(v ->
-                startActivity(new Intent(this, NouvelIncidentActivity.class)));
+        // Incidents are declared by chauffeurs, not created by the admin, so no "+" action.
+        findViewById(R.id.btn_action).setVisibility(View.GONE);
 
         adapter = new IncidentAdapter(shown);
         RecyclerView rv = findViewById(R.id.recycler_incidents);

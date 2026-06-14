@@ -1,5 +1,6 @@
 package com.fleettracking.app.chauffeur;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import com.fleettracking.app.adapters.TrajetAdapter;
 import com.fleettracking.app.data.RepoCallback;
 import com.fleettracking.app.data.Repository;
 import com.fleettracking.app.model.Trajet;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,12 @@ public class HistoriqueActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.history_trips_title);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
 
-        adapter = new TrajetAdapter(trajets);
+        adapter = new TrajetAdapter(trajets, t -> {
+            Intent i = new Intent(this, TrajetMapActivity.class);
+            i.putExtra(TrajetMapActivity.EXTRA_TRAJET, new Gson().toJson(t));
+            startActivity(i);
+        });
+
         RecyclerView rv = findViewById(R.id.recycler_trips);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
@@ -41,7 +48,7 @@ public class HistoriqueActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 if (!list.isEmpty()) bindSummary(list.get(0));
             }
-            @Override public void onError(String message) { /* empty */ }
+            @Override public void onError(String message) {}
         });
     }
 

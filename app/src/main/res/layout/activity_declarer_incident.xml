@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -68,80 +69,46 @@
                     android:layout_height="wrap_content"
                     android:text="@string/field_photo" />
 
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="none">
-
-                    <LinearLayout
-                        android:id="@+id/photos_container"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <LinearLayout
-                            android:id="@+id/btn_add_photo"
-                            android:layout_width="@dimen/photo_thumb"
-                            android:layout_height="@dimen/photo_thumb"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:background="@drawable/bg_vehicle_thumb">
-
-                            <ImageView
-                                android:layout_width="@dimen/icon_m"
-                                android:layout_height="@dimen/icon_m"
-                                android:src="@drawable/ic_camera"
-                                android:tint="@color/primary"
-                                android:contentDescription="@string/cd_camera" />
-
-                            <TextView
-                                style="@style/TextCaption"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/space_xs"
-                                android:textColor="@color/primary"
-                                android:text="@string/add" />
-                        </LinearLayout>
-
-                        <!-- Dynamically added photos go here -->
-                    </LinearLayout>
-                </HorizontalScrollView>
-
-                <TextView
-                    style="@style/FieldLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/field_location" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_height"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_input"
-                    android:paddingStart="@dimen/space_l"
-                    android:paddingEnd="@dimen/space_l">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="@dimen/icon_m"
-                        android:layout_height="@dimen/icon_m"
-                        android:src="@drawable/ic_map_pin"
-                        android:tint="@color/primary" />
+                        android:id="@+id/image_photo"
+                        android:layout_width="@dimen/photo_thumb"
+                        android:layout_height="@dimen/photo_thumb"
+                        android:background="@drawable/bg_vehicle_thumb"
+                        android:padding="@dimen/space_l"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_camera"
+                        android:tint="@color/text_tertiary"
+                        android:contentDescription="@string/field_photo" />
 
-                    <TextView
-                        style="@style/TextBody"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                    <LinearLayout
+                        android:id="@+id/btn_add_photo"
+                        android:layout_width="@dimen/photo_thumb"
+                        android:layout_height="@dimen/photo_thumb"
                         android:layout_marginStart="@dimen/space_m"
-                        android:text="@string/loc_rabat" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_vehicle_thumb">
 
-                    <ImageView
-                        android:layout_width="@dimen/icon_m"
-                        android:layout_height="@dimen/icon_m"
-                        android:src="@drawable/ic_chevron_right"
-                        android:tint="@color/text_tertiary" />
+                        <ImageView
+                            android:layout_width="@dimen/icon_m"
+                            android:layout_height="@dimen/icon_m"
+                            android:src="@drawable/ic_camera"
+                            android:tint="@color/primary"
+                            android:contentDescription="@string/cd_camera" />
+
+                        <TextView
+                            style="@style/TextCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_xs"
+                            android:textColor="@color/primary"
+                            android:text="@string/add" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
@@ -152,8 +119,7 @@
                 app:icon="@drawable/ic_send"
                 app:iconGravity="textStart"
                 app:iconTint="@color/white"
-                android:text="@string/send"
-                xmlns:app="http://schemas.android.com/apk/res-auto" />
+                android:text="@string/send" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

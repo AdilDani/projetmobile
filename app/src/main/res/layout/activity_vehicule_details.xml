@@ -126,11 +126,25 @@
             <EditText android:id="@+id/input_controle" style="@style/Input"
                 android:inputType="text" android:autofillHints="" />
 
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_status" />
+            <Spinner android:id="@+id/spinner_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:entries="@array/vehicle_statuses" />
+
             <TextView
                 style="@style/SectionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/assigned_driver" />
+
+            <Spinner android:id="@+id/spinner_driver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_m" />
 
             <LinearLayout
                 android:id="@+id/driver_card"

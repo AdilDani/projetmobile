@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +16,9 @@ import androidx.fragment.app.Fragment;
 
 import com.fleettracking.app.LoginActivity;
 import com.fleettracking.app.R;
+import com.fleettracking.app.admin.EditProfileActivity;
+import com.fleettracking.app.admin.HelpActivity;
+import com.fleettracking.app.admin.SettingsActivity;
 import com.fleettracking.app.util.Prefs;
 
 public class ProfilFragment extends Fragment {
@@ -50,9 +52,12 @@ public class ProfilFragment extends Fragment {
         notifSwitch.setChecked(prefs.isNotificationsEnabled());
         notifSwitch.setOnCheckedChangeListener((b, checked) -> prefs.setNotificationsEnabled(checked));
 
-        v.findViewById(R.id.row_personal).setOnClickListener(x -> toast(R.string.profile_personal_info));
-        v.findViewById(R.id.row_settings).setOnClickListener(x -> toast(R.string.profile_settings));
-        v.findViewById(R.id.row_help).setOnClickListener(x -> toast(R.string.profile_help));
+        v.findViewById(R.id.row_personal).setOnClickListener(x ->
+                startActivity(new Intent(getContext(), EditProfileActivity.class)));
+        v.findViewById(R.id.row_settings).setOnClickListener(x ->
+                startActivity(new Intent(getContext(), SettingsActivity.class)));
+        v.findViewById(R.id.row_help).setOnClickListener(x ->
+                startActivity(new Intent(getContext(), HelpActivity.class)));
         logout.setOnClickListener(x -> doLogout());
     }
 
@@ -65,10 +70,6 @@ public class ProfilFragment extends Fragment {
             row.findViewById(R.id.menu_chevron).setVisibility(View.GONE);
         }
         return row;
-    }
-
-    private void toast(int res) {
-        Toast.makeText(getContext(), res, Toast.LENGTH_SHORT).show();
     }
 
     private void doLogout() {

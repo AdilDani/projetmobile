@@ -19,6 +19,7 @@ public class Trajet {
     public double departLng;
     public double arriveeLat;
     public double arriveeLng;
+    public String waypoints; // JSON: [[lat,lng], ...]
 
     public Trajet() {}
 }

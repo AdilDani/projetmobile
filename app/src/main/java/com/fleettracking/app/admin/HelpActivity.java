@@ -1,5 +1,7 @@
 package com.fleettracking.app.admin;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -14,6 +16,14 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_simple_text);
         ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.profile_help);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
-        ((TextView) findViewById(R.id.text_content)).setText("Besoin d'aide ?\n\nContactez le support technique :\nEmail: support@fleettracking.com\nTél: +212 5 22 00 00 00\n\nGuide d'utilisation :\nConsultez notre documentation en ligne.");
+        ((TextView) findViewById(R.id.text_content)).setText(
+                "Besoin d'aide ?\n\nPour toute question ou problème technique, contactez l'administrateur :");
+
+        findViewById(R.id.btn_contact).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SENDTO,
+                    Uri.parse("mailto:adil.dani@uit.ac.ma"));
+            intent.putExtra(Intent.EXTRA_SUBJECT, "FleetTracking – Demande d'aide");
+            startActivity(Intent.createChooser(intent, "Envoyer un email"));
+        });
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,9 +8,87 @@
 
     <include layout="@layout/toolbar_admin" />
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/map_view"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Tapping a marker reveals this card; tapping the card opens the vehicle. -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_vehicle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/space_l"
+            android:visibility="gone"
+            app:cardCornerRadius="@dimen/radius_l"
+            app:cardElevation="@dimen/elevation_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_m">
+
+                <ImageView
+                    android:id="@+id/card_image"
+                    android:layout_width="@dimen/avatar_l"
+                    android:layout_height="@dimen/avatar_l"
+                    android:background="@drawable/bg_vehicle_thumb"
+                    android:padding="@dimen/space_m"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_truck"
+                    android:tint="@color/text_secondary"
+                    android:contentDescription="@string/cd_vehicle_image" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/space_m"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/card_name"
+                        style="@style/TextSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name" />
+
+                    <TextView
+                        android:id="@+id/card_plate"
+                        style="@style/TextSecondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:text="@string/label_plate" />
+
+                    <TextView
+                        android:id="@+id/card_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:paddingStart="@dimen/space_m"
+                        android:paddingEnd="@dimen/space_m"
+                        android:paddingTop="@dimen/space_xs"
+                        android:paddingBottom="@dimen/space_xs"
+                        android:text="@string/status_available"
+                        android:textSize="@dimen/text_small"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/icon_m"
+                    android:layout_height="@dimen/icon_m"
+                    android:src="@drawable/ic_chevron_right"
+                    android:tint="@color/text_tertiary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
 </LinearLayout>

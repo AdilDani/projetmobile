@@ -59,11 +59,21 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        boolean wantsChauffeur = toggleRole.getCheckedButtonId() == R.id.btn_role_chauffeur;
+
         btnLogin.setEnabled(false);
         repo.login(login, password, new RepoCallback<LoginResponse>() {
             @Override public void onResult(LoginResponse res) {
                 btnLogin.setEnabled(true);
                 boolean isChauffeur = Prefs.ROLE_CHAUFFEUR.equals(res.role);
+
+                // The credentials are valid, but they must match the selected role.
+                if (isChauffeur != wantsChauffeur) {
+                    Toast.makeText(LoginActivity.this,
+                            R.string.login_role_mismatch, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 new Prefs(LoginActivity.this)
                         .saveSession(res.role, login, res.userId, res.name);
 

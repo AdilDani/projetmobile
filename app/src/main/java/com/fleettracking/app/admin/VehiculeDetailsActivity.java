@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,18 +21,26 @@ import com.fleettracking.app.data.RepoCallback;
 import com.fleettracking.app.data.Repository;
 import com.fleettracking.app.model.Chauffeur;
 import com.fleettracking.app.model.Vehicule;
+import com.fleettracking.app.util.FleetConfig;
 import com.fleettracking.app.util.ImageUtils;
 import com.fleettracking.app.util.UiUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VehiculeDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_VEHICLE_ID = "extra_vehicle_id";
+    public static final String EXTRA_NEW = "extra_new";
 
     private Repository repo;
     private Vehicule current;
-    
+    private boolean isNew;
+
     private ImageView imgVehicle;
     private EditText inputBrand, inputModel, inputPlate, inputYear, inputMileage, inputConsumption, inputVidange, inputControle;
+    private Spinner spinnerStatus, spinnerDriver;
+    private final List<Chauffeur> drivers = new ArrayList<>();
 
     private final ActivityResultLauncher<String> picker = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
@@ -51,9 +62,12 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
 
         repo = new Repository(this);
 
-        ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.vehicle_details_title);
+        isNew = getIntent().getBooleanExtra(EXTRA_NEW, false);
+
+        ((TextView) findViewById(R.id.toolbar_title))
+                .setText(isNew ? R.string.add_vehicle_title : R.string.vehicle_details_title);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
-        
+
         imgVehicle = findViewById(R.id.img_vehicle);
         inputBrand = findViewById(R.id.input_brand);
         inputModel = findViewById(R.id.input_model);
@@ -63,12 +77,38 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         inputConsumption = findViewById(R.id.input_consumption);
         inputVidange = findViewById(R.id.input_vidange);
         inputControle = findViewById(R.id.input_controle);
+        spinnerStatus = findViewById(R.id.spinner_status);
+        spinnerDriver = findViewById(R.id.spinner_driver);
 
-        String id = getIntent().getStringExtra(EXTRA_VEHICLE_ID);
-        repo.getVehicule(id == null ? "v1" : id, new RepoCallback<Vehicule>() {
-            @Override public void onResult(Vehicule x) { current = x; bind(x); }
-            @Override public void onError(String message) {
-                Toast.makeText(VehiculeDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+        // A driver can only be assigned to a vehicle that is "En mission".
+        spinnerStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
+                boolean enMission = getString(R.string.status_on_mission)
+                        .equals(spinnerStatus.getSelectedItem().toString());
+                spinnerDriver.setEnabled(enMission);
+                if (!enMission) spinnerDriver.setSelection(0);
+            }
+            @Override public void onNothingSelected(AdapterView<?> p) {}
+        });
+
+        // Load drivers first so the assignment spinner is ready, then the vehicle.
+        loadDrivers(() -> {
+            if (isNew) {
+                // Blank vehicle to be created. A new car starts "Disponible" with no
+                // driver, parked at the depot (its first "last known location").
+                current = new Vehicule();
+                current.statut = getString(R.string.status_available);
+                current.lat = FleetConfig.DEPOT_LAT;
+                current.lng = FleetConfig.DEPOT_LNG;
+                bind(current);
+            } else {
+                String id = getIntent().getStringExtra(EXTRA_VEHICLE_ID);
+                repo.getVehicule(id == null ? "v1" : id, new RepoCallback<Vehicule>() {
+                    @Override public void onResult(Vehicule x) { current = x; bind(x); }
+                    @Override public void onError(String message) {
+                        Toast.makeText(VehiculeDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -82,6 +122,48 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         });
+    }
+
+    /** Loads the chauffeur list into the assignment spinner, then runs {@code then}. */
+    private void loadDrivers(Runnable then) {
+        repo.getChauffeurs(new RepoCallback<List<Chauffeur>>() {
+            @Override public void onResult(List<Chauffeur> list) {
+                drivers.clear();
+                drivers.addAll(list);
+                List<String> names = new ArrayList<>();
+                names.add(getString(R.string.driver_none));
+                for (Chauffeur c : list) names.add(c.nom);
+                ArrayAdapter<String> ad = new ArrayAdapter<>(VehiculeDetailsActivity.this,
+                        android.R.layout.simple_spinner_item, names);
+                ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerDriver.setAdapter(ad);
+                then.run();
+            }
+            @Override public void onError(String message) { then.run(); }
+        });
+    }
+
+    /** Selects the status spinner row matching the given status string. */
+    private void selectStatus(String statut) {
+        String[] values = {
+                getString(R.string.status_available),
+                getString(R.string.status_unavailable),
+                getString(R.string.status_on_mission)
+        };
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].equals(statut)) { spinnerStatus.setSelection(i); return; }
+        }
+        spinnerStatus.setSelection(0);
+    }
+
+    /** Selects the driver spinner row matching the given chauffeur id (0 = none). */
+    private void selectDriver(String conducteurId) {
+        if (conducteurId != null) {
+            for (int i = 0; i < drivers.size(); i++) {
+                if (conducteurId.equals(drivers.get(i).id)) { spinnerDriver.setSelection(i + 1); return; }
+            }
+        }
+        spinnerDriver.setSelection(0);
     }
 
     private void bind(Vehicule x) {
@@ -100,6 +182,9 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         inputConsumption.setText(String.valueOf(x.consommation));
         inputVidange.setText(x.prochaineVidange);
         inputControle.setText(x.controleTechnique);
+
+        selectStatus(x.statut);
+        selectDriver(x.conducteurId);
 
         TextView dn = findViewById(R.id.driver_name);
         TextView dp = findViewById(R.id.driver_phone);
@@ -143,14 +228,36 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         current.prochaineVidange = inputVidange.getText().toString();
         current.controleTechnique = inputControle.getText().toString();
 
-        repo.updateVehicule(current.id, current, new RepoCallback<Vehicule>() {
+        // Status + driver assignment. Only an "En mission" car carries a driver.
+        String statut = spinnerStatus.getSelectedItem().toString();
+        boolean enMission = getString(R.string.status_on_mission).equals(statut);
+        if (enMission) {
+            int pos = spinnerDriver.getSelectedItemPosition();
+            if (pos <= 0 || pos > drivers.size()) {
+                Toast.makeText(this, R.string.select_driver_required, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            current.conducteurId = drivers.get(pos - 1).id;
+        } else {
+            current.conducteurId = null;
+        }
+        current.statut = statut;
+
+        RepoCallback<Vehicule> cb = new RepoCallback<Vehicule>() {
             @Override public void onResult(Vehicule saved) {
-                ((TextView) findViewById(R.id.text_vehicle_name)).setText(saved.getNomComplet());
+                if (saved != null) { current = saved; bind(saved); }
                 Toast.makeText(VehiculeDetailsActivity.this, R.string.saved_toast, Toast.LENGTH_SHORT).show();
+                if (isNew) finish();   // back to the list, which reloads on resume
             }
             @Override public void onError(String message) {
                 Toast.makeText(VehiculeDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+
+        if (isNew || current.id == null || current.id.isEmpty()) {
+            repo.createVehicule(current, cb);
+        } else {
+            repo.updateVehicule(current.id, current, cb);
+        }
     }
 }

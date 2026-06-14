@@ -71,6 +71,7 @@ public final class ImageUtils {
         if (bmp != null) {
             view.setImageBitmap(bmp);
             view.clearColorFilter();
+            view.setImageTintList(null);   // drop any android:tint so the photo renders naturally
         } else {
             view.setImageResource(placeholder);
         }

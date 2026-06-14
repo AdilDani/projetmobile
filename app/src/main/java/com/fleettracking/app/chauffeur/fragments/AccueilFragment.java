@@ -1,6 +1,8 @@
 package com.fleettracking.app.chauffeur.fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -31,6 +35,14 @@ public class AccueilFragment extends Fragment {
 
     private Vehicule currentVehicule;
     private MaterialButton btnTrip;
+
+    private final ActivityResultLauncher<String> locationPermLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            granted -> {
+                if (granted) startTripNow();
+                else Toast.makeText(getContext(),
+                        R.string.location_permission_required, Toast.LENGTH_SHORT).show();
+            });
 
     @Nullable
     @Override
@@ -78,12 +90,17 @@ public class AccueilFragment extends Fragment {
         btnTrip.setOnClickListener(x -> {
             if (tripManager.isTripActive()) {
                 tripManager.stopTrip();
-                Toast.makeText(getContext(), "Trajet arrêté", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.trip_stopped, Toast.LENGTH_SHORT).show();
+                updateTripButton();
             } else if (currentVehicule != null) {
-                tripManager.startTrip(currentVehicule.id);
-                Toast.makeText(getContext(), "Trajet démarré", Toast.LENGTH_SHORT).show();
+                // A trip streams real GPS, so we need location permission first.
+                if (ContextCompat.checkSelfPermission(requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    startTripNow();
+                } else {
+                    locationPermLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+                }
             }
-            updateTripButton();
         });
 
         ChauffeurMainActivity host = (ChauffeurMainActivity) requireActivity();
@@ -95,6 +112,14 @@ public class AccueilFragment extends Fragment {
                 host.selectTab(ChauffeurMainActivity.TAB_VEHICULE));
         v.findViewById(R.id.shortcut_consumption).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), HistoriqueActivity.class)));
+    }
+
+    private void startTripNow() {
+        if (currentVehicule == null) return;
+        String userId = new Prefs(requireContext()).getUserId();
+        TripManager.getInstance(requireContext()).startTrip(currentVehicule.id, userId);
+        Toast.makeText(getContext(), R.string.trip_started, Toast.LENGTH_SHORT).show();
+        updateTripButton();
     }
 
     private void updateTripButton() {

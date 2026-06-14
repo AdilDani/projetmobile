@@ -7,4 +7,9 @@
         <item>@string/incident_type_glass</item>
         <item>@string/incident_type_other</item>
     </string-array>
+    <string-array name="vehicle_statuses">
+        <item>@string/status_available</item>
+        <item>@string/status_unavailable</item>
+        <item>@string/status_on_mission</item>
+    </string-array>
 </resources>

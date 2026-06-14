@@ -165,7 +165,7 @@ public class Repository {
         getVehicules(new RepoCallback<List<Vehicule>>() {
             @Override public void onResult(List<Vehicule> list) {
                 for (Vehicule v : list) if (v.id.equals(id)) { cb.onResult(v); return; }
-                if (!list.isEmpty()) cb.onResult(list.get(0)); else cb.onError("Véhicule introuvable");
+                cb.onError("Véhicule introuvable");
             }
             @Override public void onError(String m) { cb.onError(m); }
         });
@@ -193,7 +193,7 @@ public class Repository {
         getChauffeurs(new RepoCallback<List<Chauffeur>>() {
             @Override public void onResult(List<Chauffeur> list) {
                 for (Chauffeur c : list) if (c.id.equals(id)) { cb.onResult(c); return; }
-                if (!list.isEmpty()) cb.onResult(list.get(0)); else cb.onError("Chauffeur introuvable");
+                cb.onError("Chauffeur introuvable");
             }
             @Override public void onError(String m) { cb.onError(m); }
         });
