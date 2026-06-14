@@ -69,6 +69,12 @@ public class ChauffeurDetailsActivity extends AppCompatActivity {
         if (isNew) {
             current = new Chauffeur();
             current.statut = "Disponible";
+            current.nom = "";
+            current.telephone = "";
+            current.email = "";
+            current.permis = "";
+            current.login = "";
+            current.password = "";
             loadVehiclesAndBind(current);
         } else {
             String id = getIntent().getStringExtra(EXTRA_CHAUFFEUR_ID);
@@ -94,10 +100,11 @@ public class ChauffeurDetailsActivity extends AppCompatActivity {
 
                 for (Vehicule v : list) {
                     // Show only available vehicles, plus the one already assigned to this driver
-                    if ("Disponible".equals(v.statut) || c.id.equals(v.conducteurId)) {
+                    boolean isAssigned = c.id != null && c.id.equals(v.conducteurId);
+                    if ("Disponible".equals(v.statut) || isAssigned) {
                         availableVehicles.add(v);
                         displayNames.add(v.getNomComplet() + " (" + v.immatriculation + ")");
-                        if (c.id.equals(v.conducteurId)) {
+                        if (isAssigned) {
                             selectedIndex = availableVehicles.size();
                             oldVehicleId = v.id;
                         }
