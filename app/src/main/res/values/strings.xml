@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FleetTracking</string>
+    <string name="google_maps_key">AIzaSyDWcgsx4EIQOdo0sIGJEF9PCeUL7WunlSs</string>
+
+    <!-- Common -->
+    <string name="brand_fleet">Fleet</string>
+    <string name="brand_tracking">Tracking</string>
+    <string name="tagline_admin">Gestion de flotte de véhicules</string>
+    <string name="tagline_chauffeur">Espace Chauffeur</string>
+    <string name="back">Retour</string>
+    <string name="save">Enregistrer</string>
+    <string name="send">Envoyer</string>
+    <string name="cancel">Annuler</string>
+    <string name="edit">Modifier</string>
+    <string name="add">Ajouter</string>
+    <string name="see_all">Voir tout</string>
+    <string name="search_hint_vehicle">Rechercher un véhicule</string>
+    <string name="search_hint_driver">Rechercher un chauffeur</string>
+    <string name="status_time_label">9:41</string>
+
+    <!-- Login -->
+    <string name="login_title">Connexion</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Mot de passe</string>
+    <string name="login_forgot">Mot de passe oublié ?</string>
+    <string name="login_button">Se connecter</string>
+    <string name="login_no_account">Vous n\'avez pas de compte ? </string>
+    <string name="login_signup">Inscrivez-vous</string>
+    <string name="login_role_question">Se connecter en tant que :</string>
+    <string name="role_admin">Administrateur</string>
+    <string name="role_chauffeur">Chauffeur</string>
+    <string name="login_hint_demo"></string>
+
+    <!-- Bottom nav (admin) -->
+    <string name="nav_accueil">Accueil</string>
+    <string name="nav_vehicules">Véhicules</string>
+    <string name="nav_carte">Carte</string>
+    <string name="nav_chauffeurs">Chauffeurs</string>
+    <string name="nav_historiques">Historique</string>
+    <!-- Bottom nav (chauffeur) -->
+    <string name="nav_position">Position</string>
+    <string name="nav_vehicule">Véhicule</string>
+    <string name="nav_profil">Profil</string>
+
+    <!-- ===== ADMIN ===== -->
+    <string name="admin_hello">Bonjour, Admin</string>
+    <string name="admin_overview">Voici un aperçu de votre flotte aujourd\'hui.</string>
+    <string name="admin_date_sample">31 Mai 2026</string>
+    <string name="stat_vehicles">Véhicules</string>
+    <string name="stat_drivers">Chauffeurs</string>
+    <string name="stat_incidents">Incidents</string>
+    <string name="stat_maintenance">Entretiens</string>
+    <string name="admin_vehicle_location">Localisation des véhicules</string>
+
+    <!-- Vehicle status -->
+    <string name="status_available">Disponible</string>
+    <string name="status_on_mission">En mission</string>
+    <string name="status_unavailable">Indisponible</string>
+    <string name="status_maintenance">Maintenance</string>
+    <string name="driver_none">Aucun conducteur</string>
+    <string name="select_driver_required">Sélectionnez un conducteur pour une mission</string>
+
+    <!-- Vehicle details -->
+    <string name="vehicle_details_title">Détails véhicule</string>
+    <string name="add_vehicle_title">Ajouter un véhicule</string>
+    <string name="add_chauffeur_title">Ajouter un chauffeur</string>
+    <string name="label_plate">Immatriculation</string>
+    <string name="label_brand">Marque</string>
+    <string name="label_model">Modèle</string>
+    <string name="label_year">Année</string>
+    <string name="label_mileage">Kilométrage</string>
+    <string name="label_status">Statut</string>
+    <string name="label_fuel">Carburant</string>
+    <string name="label_next_service">Prochaine vidange</string>
+    <string name="label_technical_check">Contrôle technique</string>
+    <string name="label_consumption">Consommation (L/100km)</string>
+    <string name="assigned_driver">Conducteur assigné</string>
+    <string name="see_on_map">Voir sur la carte</string>
+
+    <!-- Map -->
+    <string name="map_title">Carte</string>
+    <string name="map_speed_label">Vitesse :</string>
+    <string name="filter">Filtrer</string>
+
+    <!-- Chauffeurs (admin) -->
+    <string name="chauffeurs_title">Chauffeurs</string>
+    <string name="call">Appeler</string>
+    <string name="sms">SMS</string>
+    <string name="email">Email</string>
+
+    <!-- Chauffeur details (admin) -->
+    <string name="chauffeur_details_title">Détails chauffeur</string>
+    <string name="label_fullname">Nom complet</string>
+    <string name="label_phone">Téléphone</string>
+    <string name="label_email">Email</string>
+    <string name="label_assigned_vehicle">Véhicule affecté</string>
+    <string name="no_vehicle_assigned">Aucun véhicule affecté</string>
+    <string name="label_license">Numéro de permis</string>
+    <string name="section_credentials">Identifiants de connexion</string>
+    <string name="label_login">Identifiant (login)</string>
+    <string name="label_password">Mot de passe</string>
+    <string name="save_changes">Enregistrer les modifications</string>
+    <string name="saved_toast">Modifications enregistrées</string>
+
+    <!-- Incidents -->
+    <string name="incidents_title">Incidents</string>
+    <string name="vehicles_btn_incidents">Incidents</string>
+    <string name="vehicles_btn_entretiens">Entretiens</string>
+    <string name="login_missing_fields">Veuillez saisir vos identifiants</string>
+    <string name="login_role_mismatch">Ce compte ne correspond pas au rôle sélectionné</string>
+    <string name="tab_all">Tous</string>
+    <string name="tab_ongoing">En cours</string>
+    <string name="tab_resolved">Résolus</string>
+    <string name="new_incident_title">Nouvel incident</string>
+    <string name="incident_details_title">Détails de l\'incident</string>
+    <string name="declare_incident_title">Déclarer un incident</string>
+    <string name="field_vehicle">Véhicule</string>
+    <string name="field_incident_type">Type d\'incident</string>
+    <string name="field_description">Description</string>
+    <string name="field_description_hint">Décrivez l\'incident...</string>
+    <string name="field_photo">Photo</string>
+    <string name="no_photo_available">Aucune photo disponible</string>
+    <string name="field_location">Localisation</string>
+    <string name="incident_type_mechanical">Panne mécanique</string>
+    <string name="incident_type_accident">Accident / Collision</string>
+    <string name="incident_type_tire">Pneu crevé</string>
+    <string name="incident_type_glass">Bris de glace</string>
+    <string name="incident_type_other">Autre</string>
+    <string name="incident_sent_toast">Incident envoyé</string>
+    <string name="error_server">Serveur injoignable</string>
+    <string name="notif_channel_id">fleet_incidents</string>
+    <string name="notif_channel_name">Incidents</string>
+    <string name="notif_channel_desc">Notifications liées aux incidents déclarés</string>
+    <string name="notif_incident_title">Incident envoyé</string>
+    <string name="notif_incident_text">Votre incident a bien été transmis au gestionnaire.</string>
+
+    <!-- Entretiens -->
+    <string name="maintenance_title">Entretiens</string>
+    <string name="tab_upcoming">À venir</string>
+    <string name="tab_history">Historique</string>
+    <string name="due_in_days">Dans %1$d jours</string>
+    <string name="due_in_2days">Dans 2 jours</string>
+
+    <!-- Historique -->
+    <string name="history_title">Historique</string>
+    <string name="tab_trips">Trajets</string>
+
+    <!-- Profil (admin) -->
+    <string name="profile_title">Profil</string>
+    <string name="profile_personal_info">Informations personnelles</string>
+    <string name="profile_settings">Paramètres</string>
+    <string name="profile_notifications">Notifications</string>
+    <string name="profile_help">Aide &amp; support</string>
+    <string name="profile_logout">Déconnexion</string>
+    <string name="admin_name">Admin Système</string>
+    <string name="admin_role">Administrateur de flotte</string>
+
+    <!-- ===== CHAUFFEUR ===== -->
+    <string name="chauffeur_header_title">FleetTracking</string>
+    <string name="chauffeur_header_sub">Chauffeur</string>
+    <string name="greeting_hello">Bonjour %1$s 👋</string>
+    <string name="greeting_welcome">Bon retour !</string>
+    <string name="assigned_vehicle_card">Véhicule affecté</string>
+    <string name="mission_today">Mission du jour</string>
+    <string name="mission_depart">Départ : %1$s</string>
+    <string name="mission_arrival">Arrivée prévue : %1$s</string>
+    <string name="start_trip">Démarrer trajet</string>
+    <string name="stop_trip">Arrêter trajet</string>
+    <string name="trip_started">Trajet démarré</string>
+    <string name="trip_stopped">Trajet arrêté</string>
+    <string name="location_permission_required">Autorisation de localisation requise pour démarrer un trajet</string>
+    <string name="shortcuts">Raccourcis</string>
+    <string name="shortcut_position">Ma position</string>
+    <string name="shortcut_incident">Incident</string>
+    <string name="shortcut_maintenance">Entretien</string>
+    <string name="shortcut_consumption">Consommation</string>
+
+    <!-- Position -->
+    <string name="my_position_title">Ma position</string>
+    <string name="realtime_status">Statut en temps réel</string>
+    <string name="last_update">Dernière mise à jour : %1$s</string>
+    <string name="status_running">En marche</string>
+    <string name="speed">Vitesse</string>
+    <string name="speed_unit">km/h</string>
+    <string name="direction">Direction</string>
+    <string name="direction_ne">N-E</string>
+    <string name="send_my_position">Envoyer ma position</string>
+    <string name="position_sent_toast">Position envoyée</string>
+
+    <!-- Mon véhicule (chauffeur) -->
+    <string name="my_vehicle_title">Mon véhicule</string>
+    <string name="service_in_km">Dans %1$s</string>
+
+    <!-- Historique trajets (chauffeur) -->
+    <string name="history_trips_title">Historique trajets</string>
+    <string name="today">Aujourd\'hui</string>
+    <string name="metric_distance">Distance</string>
+    <string name="metric_duration">Durée</string>
+    <string name="metric_avg_speed">Vitesse moyenne</string>
+    <string name="trip_departure">Départ</string>
+    <string name="trip_arrival">Arrivée</string>
+    <string name="trip_distance_covered">Distance parcourue</string>
+    <string name="trip_total_time">Temps total</string>
+    <string name="trip_estimated_consumption">Consommation estimée</string>
+
+    <!-- Profil (chauffeur) -->
+    <string name="logout_done">Déconnecté</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_logo">Logo</string>
+    <string name="cd_avatar">Avatar</string>
+    <string name="cd_vehicle_image">Image du véhicule</string>
+    <string name="cd_notifications">Notifications</string>
+    <string name="cd_profile">Profil</string>
+    <string name="cd_back">Retour</string>
+    <string name="cd_camera">Appareil photo</string>
+    <string name="cd_call">Appeler</string>
+    <string name="cd_email">Email</string>
+    <string name="cd_locate">Me localiser</string>
+    <string name="notif_badge_sample">3</string>
+    <string name="loc_rabat">Rabat</string>
+    <string name="loc_casablanca">Casablanca</string>
+    <string name="mission_depart_sample">Départ : 08:30</string>
+    <string name="mission_arrival_sample">Arrivée prévue : 12:45</string>
+    <string name="speed_sample">65</string>
+    <string name="btn_mark_resolved">Marquer comme résolu</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_location">Localisation (GPS)</string>
+    <string name="settings_notifications_desc">Gérer les alertes de l\'application</string>
+    <string name="settings_location_desc">Activer le GPS pour le suivi</string>
+</resources>

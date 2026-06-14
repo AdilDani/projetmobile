@@ -4,7 +4,6 @@ build/
 local.properties
 *.iml
 .idea/
-app/src/main/res/values/strings.xml
 
 # Java / Maven
 target/
