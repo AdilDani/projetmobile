@@ -41,12 +41,13 @@
             android:padding="@dimen/space_l">
 
             <ImageView
+                android:id="@+id/img_vehicle_header"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/img_vehicle_h"
                 android:background="@drawable/bg_card"
                 android:padding="@dimen/space_xl"
                 android:src="@drawable/ic_truck"
-                android:tint="@color/text_secondary"
+                android:scaleType="centerInside"
                 android:elevation="@dimen/elevation_card"
                 android:contentDescription="@string/cd_vehicle_image" />
 

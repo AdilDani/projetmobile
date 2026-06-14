@@ -31,7 +31,7 @@ import java.util.Locale;
 
 public class PositionFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final long POLL_INTERVAL = 30_000;
+    private static final long POLL_INTERVAL = 3_000;
 
     private MapView mapView;
     private GoogleMap googleMap;

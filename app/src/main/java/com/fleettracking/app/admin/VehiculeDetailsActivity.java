@@ -119,6 +119,10 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         findViewById(R.id.btn_see_map).setOnClickListener(v -> {
             Intent i = new Intent(this, AdminMainActivity.class);
             i.putExtra(AdminMainActivity.EXTRA_OPEN_CARTE, true);
+            if (current != null) {
+                i.putExtra(AdminMainActivity.EXTRA_FOCUS_LAT, current.lat);
+                i.putExtra(AdminMainActivity.EXTRA_FOCUS_LNG, current.lng);
+            }
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         });
@@ -243,11 +247,16 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         }
         current.statut = statut;
 
+        final String localPhoto = current.photo; // preserve in case server response strips it
         RepoCallback<Vehicule> cb = new RepoCallback<Vehicule>() {
             @Override public void onResult(Vehicule saved) {
-                if (saved != null) { current = saved; bind(saved); }
+                if (saved != null) {
+                    if (saved.photo == null) saved.photo = localPhoto; // server may not echo large fields
+                    current = saved;
+                    bind(saved);
+                }
                 Toast.makeText(VehiculeDetailsActivity.this, R.string.saved_toast, Toast.LENGTH_SHORT).show();
-                if (isNew) finish();   // back to the list, which reloads on resume
+                if (isNew) finish();
             }
             @Override public void onError(String message) {
                 Toast.makeText(VehiculeDetailsActivity.this, message, Toast.LENGTH_SHORT).show();

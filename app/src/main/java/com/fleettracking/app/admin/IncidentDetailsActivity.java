@@ -62,23 +62,56 @@ public class IncidentDetailsActivity extends AppCompatActivity {
         status.setText(in.statut);
         status.setTextColor(UiUtils.statusColor(this, in.statut));
 
+        // Resolve button — hidden if already resolved
+        View btnResolve = findViewById(R.id.btn_resolve);
+        if ("Résolu".equals(in.statut)) {
+            btnResolve.setVisibility(View.GONE);
+        } else {
+            btnResolve.setVisibility(View.VISIBLE);
+            btnResolve.setOnClickListener(v -> {
+                btnResolve.setEnabled(false);
+                in.statut = "Résolu";
+                repo.updateIncident(in.id, in, new RepoCallback<Incident>() {
+                    @Override public void onResult(Incident updated) {
+                        status.setText(updated.statut);
+                        status.setTextColor(UiUtils.statusColor(IncidentDetailsActivity.this, updated.statut));
+                        btnResolve.setVisibility(View.GONE);
+                    }
+                    @Override public void onError(String message) {
+                        in.statut = "En cours";
+                        btnResolve.setEnabled(true);
+                        Toast.makeText(IncidentDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+        }
+
         // Chauffeur Card
-        ((TextView) findViewById(R.id.text_chauffeur_name)).setText(in.chauffeurNom);
+        TextView tvChauffeurName = findViewById(R.id.text_chauffeur_name);
+        tvChauffeurName.setText(in.chauffeurNom);
         if (in.chauffeurId != null && !in.chauffeurId.isEmpty()) {
+            final String cid = in.chauffeurId;
+            // Wire navigation immediately — just like vehicle card
+            findViewById(R.id.card_chauffeur).setOnClickListener(v -> {
+                Intent i = new Intent(IncidentDetailsActivity.this, ChauffeurDetailsActivity.class);
+                i.putExtra(ChauffeurDetailsActivity.EXTRA_CHAUFFEUR_ID, cid);
+                startActivity(i);
+            });
+            // Load photo, name fallback, and call/SMS buttons asynchronously
             repo.getChauffeur(in.chauffeurId, new RepoCallback<Chauffeur>() {
                 @Override public void onResult(Chauffeur c) {
+                    if (in.chauffeurNom == null || in.chauffeurNom.isEmpty()) {
+                        tvChauffeurName.setText(c.nom);
+                    }
                     ImageUtils.bind(findViewById(R.id.img_chauffeur), c.photo, R.drawable.ic_person);
-                    findViewById(R.id.card_chauffeur).setOnClickListener(v -> {
-                        Intent i = new Intent(IncidentDetailsActivity.this, ChauffeurDetailsActivity.class);
-                        i.putExtra(ChauffeurDetailsActivity.EXTRA_CHAUFFEUR_ID, c.id);
-                        startActivity(i);
-                    });
-                    findViewById(R.id.btn_call_chauffeur).setOnClickListener(v ->
-                            startActivity(new Intent(Intent.ACTION_DIAL,
-                                    Uri.parse("tel:" + c.telephone))));
-                    findViewById(R.id.btn_sms_chauffeur).setOnClickListener(v ->
-                            startActivity(new Intent(Intent.ACTION_SENDTO,
-                                    Uri.parse("smsto:" + c.telephone))));
+                    if (c.telephone != null && !c.telephone.isEmpty()) {
+                        findViewById(R.id.btn_call_chauffeur).setOnClickListener(v ->
+                                startActivity(new Intent(Intent.ACTION_DIAL,
+                                        Uri.parse("tel:" + c.telephone))));
+                        findViewById(R.id.btn_sms_chauffeur).setOnClickListener(v ->
+                                startActivity(new Intent(Intent.ACTION_SENDTO,
+                                        Uri.parse("smsto:" + c.telephone))));
+                    }
                 }
                 @Override public void onError(String message) {}
             });
@@ -88,14 +121,17 @@ public class IncidentDetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.text_vehicle_name)).setText(in.vehiculeNom);
         ((TextView) findViewById(R.id.text_vehicle_plate)).setText(in.immatriculation);
         if (in.vehiculeId != null && !in.vehiculeId.isEmpty()) {
+            // Wire navigation immediately — vehiculeId is all we need
+            final String vid = in.vehiculeId;
+            findViewById(R.id.card_vehicle).setOnClickListener(v_view -> {
+                Intent i = new Intent(IncidentDetailsActivity.this, VehiculeDetailsActivity.class);
+                i.putExtra(VehiculeDetailsActivity.EXTRA_VEHICLE_ID, vid);
+                startActivity(i);
+            });
+            // Load photo asynchronously
             repo.getVehicule(in.vehiculeId, new RepoCallback<Vehicule>() {
                 @Override public void onResult(Vehicule v) {
                     ImageUtils.bind(findViewById(R.id.img_vehicle), v.photo, R.drawable.ic_truck);
-                    findViewById(R.id.card_vehicle).setOnClickListener(v_view -> {
-                        Intent i = new Intent(IncidentDetailsActivity.this, VehiculeDetailsActivity.class);
-                        i.putExtra(VehiculeDetailsActivity.EXTRA_VEHICLE_ID, v.id);
-                        startActivity(i);
-                    });
                 }
                 @Override public void onError(String message) {}
             });

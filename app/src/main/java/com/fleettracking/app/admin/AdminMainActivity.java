@@ -17,6 +17,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class AdminMainActivity extends AppCompatActivity {
 
     public static final String EXTRA_OPEN_CARTE = "extra_open_carte";
+    public static final String EXTRA_FOCUS_LAT  = "extra_focus_lat";
+    public static final String EXTRA_FOCUS_LNG  = "extra_focus_lng";
 
     private BottomNavigationView bottomNav;
 
@@ -44,7 +46,30 @@ public class AdminMainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             if (getIntent().getBooleanExtra(EXTRA_OPEN_CARTE, false)) {
+                double lat = getIntent().getDoubleExtra(EXTRA_FOCUS_LAT, 0);
+                double lng = getIntent().getDoubleExtra(EXTRA_FOCUS_LNG, 0);
+                CarteFragment carte = new CarteFragment();
+                if (lat != 0 || lng != 0) {
+                    Bundle args = new Bundle();
+                    args.putDouble(EXTRA_FOCUS_LAT, lat);
+                    args.putDouble(EXTRA_FOCUS_LNG, lng);
+                    carte.setArguments(args);
+                }
+                // Show the fragment directly so we control which instance is shown,
+                // then sync the nav bar without triggering the item-selected listener.
+                show(carte);
+                bottomNav.setOnItemSelectedListener(null);
                 bottomNav.setSelectedItemId(R.id.nav_carte);
+                // Restore listener after the item is selected
+                bottomNav.post(() -> bottomNav.setOnItemSelectedListener(item -> {
+                    int id = item.getItemId();
+                    if (id == R.id.nav_accueil)     show(new AdminAccueilFragment());
+                    else if (id == R.id.nav_vehicules)  show(new VehiculesFragment());
+                    else if (id == R.id.nav_carte)      show(new CarteFragment());
+                    else if (id == R.id.nav_chauffeurs) show(new ChauffeursFragment());
+                    else if (id == R.id.nav_historiques) show(new AdminHistoriqueFragment());
+                    return true;
+                }));
             } else {
                 bottomNav.setSelectedItemId(R.id.nav_accueil);
             }

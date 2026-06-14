@@ -34,7 +34,7 @@ import java.util.List;
 
 public class CarteFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final long POLL_INTERVAL = 30_000;
+    private static final long POLL_INTERVAL = 3_000;
 
     private MapView mapView;
     private GoogleMap googleMap;
@@ -75,8 +75,19 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
-        LatLng center = new LatLng(33.5731, -7.5898);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 12f));
+
+        // Default center: Casablanca. If launched from a vehicle detail, focus on that vehicle.
+        Bundle args = getArguments();
+        LatLng center;
+        float zoom;
+        if (args != null && (args.getDouble("extra_focus_lat") != 0 || args.getDouble("extra_focus_lng") != 0)) {
+            center = new LatLng(args.getDouble("extra_focus_lat"), args.getDouble("extra_focus_lng"));
+            zoom = 16f;
+        } else {
+            center = new LatLng(33.5731, -7.5898);
+            zoom = 12f;
+        }
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoom));
 
         map.setOnMarkerClickListener(marker -> {
             Object tag = marker.getTag();

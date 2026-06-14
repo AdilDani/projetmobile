@@ -3,6 +3,7 @@ package com.fleettracking.app.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fleettracking.app.R;
 import com.fleettracking.app.model.Vehicule;
+import com.fleettracking.app.util.ImageUtils;
 import com.fleettracking.app.util.UiUtils;
 
 import java.util.List;
@@ -43,6 +45,7 @@ public class VehiculeAdapter extends RecyclerView.Adapter<VehiculeAdapter.VH> {
         h.plate.setText(v.immatriculation);
         h.status.setText(v.statut);
         h.status.setTextColor(UiUtils.statusColor(h.status.getContext(), v.statut));
+        ImageUtils.bind(h.image, v.photo, R.drawable.ic_truck);
         h.itemView.setOnClickListener(x -> {
             if (listener != null) listener.onClick(v);
         });
@@ -54,9 +57,11 @@ public class VehiculeAdapter extends RecyclerView.Adapter<VehiculeAdapter.VH> {
     }
 
     static class VH extends RecyclerView.ViewHolder {
+        ImageView image;
         TextView name, plate, status;
         VH(@NonNull View v) {
             super(v);
+            image = v.findViewById(R.id.vehicle_image);
             name = v.findViewById(R.id.vehicle_name);
             plate = v.findViewById(R.id.vehicle_plate);
             status = v.findViewById(R.id.vehicle_status);

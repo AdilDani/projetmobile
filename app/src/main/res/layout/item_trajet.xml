@@ -25,20 +25,28 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/trip_date"
+            android:id="@+id/trip_vehicle"
             style="@style/TextBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="@string/today" />
+            android:text="@string/app_name" />
 
         <TextView
-            android:id="@+id/trip_vehicle"
+            android:id="@+id/trip_date"
             style="@style/TextSecondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_xs"
-            android:text="@string/app_name" />
+            android:text="@string/today" />
+
+        <TextView
+            android:id="@+id/trip_times"
+            style="@style/TextCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:textColor="@color/text_secondary" />
     </LinearLayout>
 
     <LinearLayout
@@ -57,11 +65,11 @@
             android:text="@string/metric_distance" />
 
         <TextView
-            android:id="@+id/trip_consumption"
+            android:id="@+id/trip_duration"
             style="@style/TextCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_xs"
-            android:text="@string/metric_avg_speed" />
+            android:textColor="@color/text_secondary" />
     </LinearLayout>
 </LinearLayout>

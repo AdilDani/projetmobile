@@ -117,7 +117,7 @@ public class AccueilFragment extends Fragment {
     private void startTripNow() {
         if (currentVehicule == null) return;
         String userId = new Prefs(requireContext()).getUserId();
-        TripManager.getInstance(requireContext()).startTrip(currentVehicule.id, userId);
+        TripManager.getInstance(requireContext()).startTrip(currentVehicule.id, currentVehicule.getNomComplet(), userId);
         Toast.makeText(getContext(), R.string.trip_started, Toast.LENGTH_SHORT).show();
         updateTripButton();
     }

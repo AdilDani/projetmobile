@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg">
+
+    <include layout="@layout/toolbar_back" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:paddingStart="@dimen/space_l"
+        android:paddingEnd="@dimen/space_l"
+        android:elevation="@dimen/elevation_card"
+        android:layout_marginTop="@dimen/space_l">
+
+        <!-- Notifications row -->
+        <LinearLayout
+            android:id="@+id/row_notif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingTop="@dimen/space_l"
+            android:paddingBottom="@dimen/space_l"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="@dimen/avatar_s"
+                android:layout_height="@dimen/avatar_s"
+                android:background="@drawable/bg_circle_pale"
+                android:padding="@dimen/space_s"
+                android:src="@drawable/ic_bell"
+                android:tint="@color/primary" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/space_m"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextBody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_notifications" />
+
+                <TextView
+                    style="@style/TextCaption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_notifications_desc" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="@dimen/icon_m"
+                android:layout_height="@dimen/icon_m"
+                android:src="@drawable/ic_chevron_right"
+                android:tint="@color/text_tertiary" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider" />
+
+        <!-- Location row -->
+        <LinearLayout
+            android:id="@+id/row_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingTop="@dimen/space_l"
+            android:paddingBottom="@dimen/space_l"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="@dimen/avatar_s"
+                android:layout_height="@dimen/avatar_s"
+                android:background="@drawable/bg_circle_pale"
+                android:padding="@dimen/space_s"
+                android:src="@drawable/ic_locate"
+                android:tint="@color/primary" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/space_m"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextBody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_location" />
+
+                <TextView
+                    style="@style/TextCaption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_location_desc" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="@dimen/icon_m"
+                android:layout_height="@dimen/icon_m"
+                android:src="@drawable/ic_chevron_right"
+                android:tint="@color/text_tertiary" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

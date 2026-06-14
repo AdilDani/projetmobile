@@ -18,6 +18,7 @@ import com.fleettracking.app.R;
 import com.fleettracking.app.data.RepoCallback;
 import com.fleettracking.app.data.Repository;
 import com.fleettracking.app.model.Vehicule;
+import com.fleettracking.app.util.ImageUtils;
 import com.fleettracking.app.util.Prefs;
 
 public class VehiculeFragment extends Fragment {
@@ -32,10 +33,13 @@ public class VehiculeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_chauffeur_vehicule, container, false);
     }
 
+    private ImageView imgHeader;
+
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
         this.inflater = LayoutInflater.from(getContext());
+        imgHeader = v.findViewById(R.id.img_vehicle_header);
         container = v.findViewById(R.id.details_container);
 
         Repository repo = new Repository(requireContext());
@@ -47,6 +51,7 @@ public class VehiculeFragment extends Fragment {
     }
 
     private void bind(Vehicule x) {
+        ImageUtils.bind(imgHeader, x.photo, R.drawable.ic_truck);
         container.removeAllViews();
         int textPrimary = ContextCompat.getColor(requireContext(), R.color.text_primary);
         int warning = ContextCompat.getColor(requireContext(), R.color.warning);

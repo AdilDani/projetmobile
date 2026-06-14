@@ -36,23 +36,31 @@ public class TrajetAdapter extends RecyclerView.Adapter<TrajetAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull VH h, int position) {
         Trajet t = items.get(position);
-        h.date.setText(t.date);
-        h.vehicle.setText(t.vehiculeNom);
+        h.vehicle.setText(t.vehiculeNom != null ? t.vehiculeNom : "—");
+        h.date.setText(t.date != null ? t.date : "");
+        if (t.heureDepart != null && t.heureArrivee != null) {
+            h.times.setText(t.heureDepart + " → " + t.heureArrivee);
+        } else if (t.heureDepart != null) {
+            h.times.setText(t.heureDepart);
+        } else {
+            h.times.setText("");
+        }
         h.distance.setText(t.distanceKm + " km");
-        h.consumption.setText(String.format("%.1f L/100km", t.consommation));
+        h.duration.setText(t.duree != null ? t.duree : "—");
         h.itemView.setOnClickListener(v -> { if (listener != null) listener.onClick(t); });
     }
 
     @Override public int getItemCount() { return items.size(); }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView date, vehicle, distance, consumption;
+        TextView vehicle, date, times, distance, duration;
         VH(@NonNull View v) {
             super(v);
-            date = v.findViewById(R.id.trip_date);
-            vehicle = v.findViewById(R.id.trip_vehicle);
+            vehicle  = v.findViewById(R.id.trip_vehicle);
+            date     = v.findViewById(R.id.trip_date);
+            times    = v.findViewById(R.id.trip_times);
             distance = v.findViewById(R.id.trip_distance);
-            consumption = v.findViewById(R.id.trip_consumption);
+            duration = v.findViewById(R.id.trip_duration);
         }
     }
 }

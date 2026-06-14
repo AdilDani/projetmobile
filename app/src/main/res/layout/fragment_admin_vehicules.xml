@@ -55,8 +55,14 @@
             android:layout_marginEnd="@dimen/space_s"
             android:text="@string/vehicles_btn_incidents"
             android:textSize="@dimen/text_body"
+            android:maxLines="1"
+            android:ellipsize="none"
             app:icon="@drawable/ic_warning"
             app:iconGravity="textStart"
+            app:iconSize="18dp"
+            app:iconPadding="4dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:cornerRadius="@dimen/radius_m" />
 
         <com.google.android.material.button.MaterialButton
@@ -67,8 +73,14 @@
             android:layout_marginStart="@dimen/space_s"
             android:text="@string/vehicles_btn_entretiens"
             android:textSize="@dimen/text_body"
+            android:maxLines="1"
+            android:ellipsize="none"
             app:icon="@drawable/ic_wrench"
             app:iconGravity="textStart"
+            app:iconSize="18dp"
+            app:iconPadding="4dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:cornerRadius="@dimen/radius_m" />
     </LinearLayout>
 

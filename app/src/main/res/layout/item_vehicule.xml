@@ -9,12 +9,13 @@
     android:layout_marginBottom="@dimen/space_m">
 
     <ImageView
+        android:id="@+id/vehicle_image"
         android:layout_width="@dimen/list_thumb_w"
         android:layout_height="@dimen/list_thumb_h"
         android:background="@drawable/bg_vehicle_thumb"
         android:padding="@dimen/space_s"
         android:src="@drawable/ic_truck"
-        android:tint="@color/text_secondary"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/cd_vehicle_image" />
 
     <LinearLayout

@@ -52,6 +52,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_m"
                     android:text="@string/admin_date_sample" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_resolve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_l"
+                    android:text="@string/btn_mark_resolved"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
             </LinearLayout>
 
             <TextView

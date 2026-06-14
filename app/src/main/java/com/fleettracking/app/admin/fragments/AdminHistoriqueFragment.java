@@ -17,8 +17,10 @@ import com.fleettracking.app.R;
 import com.fleettracking.app.admin.ProfilActivity;
 import com.fleettracking.app.adapters.TrajetAdapter;
 import com.fleettracking.app.data.RepoCallback;
+import com.fleettracking.app.chauffeur.TrajetMapActivity;
 import com.fleettracking.app.data.Repository;
 import com.fleettracking.app.model.Trajet;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,11 @@ public class AdminHistoriqueFragment extends Fragment {
         v.findViewById(R.id.btn_profile).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), ProfilActivity.class)));
 
-        adapter = new TrajetAdapter(trajets);
+        adapter = new TrajetAdapter(trajets, t -> {
+            Intent i = new Intent(getContext(), TrajetMapActivity.class);
+            i.putExtra(TrajetMapActivity.EXTRA_TRAJET, new Gson().toJson(t));
+            startActivity(i);
+        });
         RecyclerView rv = v.findViewById(R.id.recycler_trajets);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);

@@ -47,6 +47,7 @@ public class TripManager {
 
     private boolean isTripActive = false;
     private String activeVehicleId;
+    private String activeVehiculeNom;
     private String activeChauffeurId;
     private String activeTrajetId;
 
@@ -89,13 +90,14 @@ public class TripManager {
     public boolean isTripActive() { return isTripActive; }
 
     @SuppressLint("MissingPermission")
-    public void startTrip(String vehicleId, String chauffeurId) {
+    public void startTrip(String vehicleId, String vehiculeNom, String chauffeurId) {
         this.activeVehicleId = vehicleId;
+        this.activeVehiculeNom = vehiculeNom;
         this.activeChauffeurId = chauffeurId;
         this.isTripActive = true;
         this.waypoints.clear();
         this.firstLocation = null;
-        this.startTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        this.startTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         this.activeTrajetId = null;
 
         LocationRequest slowReq = new LocationRequest.Builder(
@@ -110,6 +112,7 @@ public class TripManager {
         Trajet t = new Trajet();
         t.chauffeurId = chauffeurId;
         t.vehiculeId = vehicleId;
+        t.vehiculeNom = vehiculeNom;
         t.heureDepart = startTime;
         t.date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         t.enCours = true;
@@ -133,14 +136,20 @@ public class TripManager {
         double[] last = waypoints.get(waypoints.size() - 1);
         double totalKm = computeDistanceKm();
 
+        String endTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        String duree = computeDuree(startTime, endTime);
+
         Trajet t = new Trajet();
         t.chauffeurId = activeChauffeurId;
         t.vehiculeId = activeVehicleId;
+        t.vehiculeNom = activeVehiculeNom;
         t.date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         t.heureDepart = startTime;
-        t.heureArrivee = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        t.heureArrivee = endTime;
+        t.duree = duree;
         t.enCours = false;
         t.distanceKm = (int) Math.round(totalKm);
+        t.vitesseMoyenne = computeAvgSpeed(totalKm, startTime, endTime);
         if (firstLocation != null) {
             t.departLat = firstLocation.getLatitude();
             t.departLng = firstLocation.getLongitude();
@@ -156,8 +165,47 @@ public class TripManager {
         });
 
         activeVehicleId = null;
+        activeVehiculeNom = null;
         activeChauffeurId = null;
         activeTrajetId = null;
+    }
+
+    private String computeDuree(String start, String end) {
+        try {
+            int startSec = toSeconds(start);
+            int endSec   = toSeconds(end);
+            int diff = endSec - startSec;
+            if (diff < 0) diff += 24 * 3600;
+            int h = diff / 3600;
+            int m = (diff % 3600) / 60;
+            int s = diff % 60;
+            if (h > 0) return h + "h " + String.format(Locale.getDefault(), "%02d", m) + "min";
+            if (m > 0) return m + "min " + String.format(Locale.getDefault(), "%02d", s) + "s";
+            return s + "s";
+        } catch (Exception ex) {
+            return "--";
+        }
+    }
+
+    private int computeAvgSpeed(double distanceKm, String start, String end) {
+        try {
+            int startSec = toSeconds(start);
+            int endSec   = toSeconds(end);
+            int diff = endSec - startSec;
+            if (diff < 0) diff += 24 * 3600;
+            if (diff <= 0) return 0;
+            return (int) Math.round(distanceKm / (diff / 3600.0));
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
+
+    private static int toSeconds(String time) {
+        String[] parts = time.split(":");
+        int h = Integer.parseInt(parts[0]);
+        int m = Integer.parseInt(parts[1]);
+        int s = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
+        return h * 3600 + m * 60 + s;
     }
 
     /** Push the vehicle's current coordinates to the backend. */
@@ -202,8 +250,10 @@ public class TripManager {
         JSONArray arr = new JSONArray();
         for (double[] pt : waypoints) {
             JSONArray pair = new JSONArray();
-            pair.put(pt[0]);
-            pair.put(pt[1]);
+            try {
+                pair.put(pt[0]);
+                pair.put(pt[1]);
+            } catch (org.json.JSONException ignored) {}
             arr.put(pair);
         }
         return arr.toString();

@@ -42,7 +42,9 @@ public final class ImageUtils {
     public static Bitmap decode(@Nullable String base64) {
         if (base64 == null || base64.isEmpty()) return null;
         try {
-            byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
+            // Strip "data:image/...;base64," prefix if present
+            String raw = base64.contains(",") ? base64.substring(base64.indexOf(',') + 1) : base64;
+            byte[] bytes = Base64.decode(raw, Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         } catch (IllegalArgumentException e) {
             return null;
