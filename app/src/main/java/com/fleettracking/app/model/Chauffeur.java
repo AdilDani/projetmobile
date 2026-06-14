@@ -9,6 +9,7 @@ public class Chauffeur {
     public String login;
     public String password;
     public String statut;
+    public String vehiculeAffecte;  // display name of assigned vehicle, may be null
     public String photo;            // base64-encoded image, may be null
 
     public Chauffeur() {}

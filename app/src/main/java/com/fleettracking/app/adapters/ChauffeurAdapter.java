@@ -44,6 +44,8 @@ public class ChauffeurAdapter extends RecyclerView.Adapter<ChauffeurAdapter.VH> 
         Chauffeur c = items.get(position);
         h.name.setText(c.nom);
         h.phone.setText(c.telephone);
+        h.vehicle.setText(c.vehiculeAffecte != null && !c.vehiculeAffecte.isEmpty()
+                ? c.vehiculeAffecte : h.vehicle.getContext().getString(R.string.no_vehicle_assigned));
         ImageUtils.bind(h.photo, c.photo, R.drawable.ic_person);
         
         h.itemView.setOnClickListener(x -> { if (listener != null) listener.onClick(c); });
@@ -57,12 +59,13 @@ public class ChauffeurAdapter extends RecyclerView.Adapter<ChauffeurAdapter.VH> 
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView name, phone;
+        TextView name, phone, vehicle;
         ImageView photo, call, sms;
         VH(@NonNull View v) {
             super(v);
             name = v.findViewById(R.id.chauffeur_name);
             phone = v.findViewById(R.id.chauffeur_phone);
+            vehicle = v.findViewById(R.id.chauffeur_vehicle);
             photo = v.findViewById(R.id.img_chauffeur);
             call = v.findViewById(R.id.btn_call);
             sms = v.findViewById(R.id.btn_sms);
