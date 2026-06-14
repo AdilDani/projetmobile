@@ -80,6 +80,20 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         spinnerStatus = findViewById(R.id.spinner_status);
         spinnerDriver = findViewById(R.id.spinner_driver);
 
+        // Keep the displayed name header in sync as the user types brand/model.
+        android.text.TextWatcher nameWatcher = new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
+                String brand = inputBrand.getText().toString().trim();
+                String model = inputModel.getText().toString().trim();
+                String name = (brand + " " + model).trim();
+                ((TextView) findViewById(R.id.text_vehicle_name)).setText(name.isEmpty() ? getString(R.string.add_vehicle_title) : name);
+            }
+        };
+        inputBrand.addTextChangedListener(nameWatcher);
+        inputModel.addTextChangedListener(nameWatcher);
+
         // A driver can only be assigned to a vehicle that is "En mission".
         spinnerStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
@@ -98,6 +112,11 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
                 // driver, parked at the depot (its first "last known location").
                 current = new Vehicule();
                 current.statut = getString(R.string.status_available);
+                current.marque = "";
+                current.modele = "";
+                current.immatriculation = "";
+                current.prochaineVidange = "";
+                current.controleTechnique = "";
                 current.lat = FleetConfig.DEPOT_LAT;
                 current.lng = FleetConfig.DEPOT_LNG;
                 bind(current);

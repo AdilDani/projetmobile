@@ -41,6 +41,8 @@ public class Vehicule {
     }
 
     public String getNomComplet() {
-        return marque + " " + modele;
+        String m = marque != null ? marque : "";
+        String mo = modele != null ? modele : "";
+        return (m + " " + mo).trim();
     }
 }
