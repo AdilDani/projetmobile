@@ -64,6 +64,13 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
         repo = new Repository(requireContext());
 
         ((TextView) v.findViewById(R.id.toolbar_title)).setText(R.string.nav_chauffeurs);
+        View action = v.findViewById(R.id.btn_action);
+        action.setVisibility(View.VISIBLE);
+        action.setOnClickListener(x -> {
+            Intent i = new Intent(getContext(), ChauffeurDetailsActivity.class);
+            i.putExtra(ChauffeurDetailsActivity.EXTRA_NEW, true);
+            detailsLauncher.launch(i);
+        });
         v.findViewById(R.id.btn_profile).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), ProfilActivity.class)));
 
