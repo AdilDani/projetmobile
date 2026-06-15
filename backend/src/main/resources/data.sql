@@ -1,4 +1,4 @@
-﻿-- ============================================================
+-- ============================================================
 -- FleetTracking seed data  —  updated schema
 -- Runs after Hibernate creates the tables (idempotent).
 -- Re-running is safe: existing rows are kept (ON CONFLICT DO NOTHING).
