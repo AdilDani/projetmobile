@@ -68,6 +68,8 @@ public interface ApiService {
     Call<Entretien> createEntretien(@Body Entretien e);
     @PUT("api/entretiens/{id}")
     Call<Entretien> updateEntretien(@Path("id") String id, @Body Entretien e);
+    @PUT("api/entretiens/{id}/done")
+    Call<Entretien> markEntretienDone(@Path("id") String id);
     @DELETE("api/entretiens/{id}")
     Call<Void> deleteEntretien(@Path("id") String id);
 

@@ -50,6 +50,7 @@
         <activity android:name=".admin.IncidentsActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".admin.NouvelIncidentActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".admin.EntretiensActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
+        <activity android:name=".admin.CreateEntretienActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".admin.ProfilActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".admin.IncidentDetailsActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />
         <activity android:name=".admin.EditProfileActivity" android:theme="@style/Theme.FleetTracking.NoActionBar" />

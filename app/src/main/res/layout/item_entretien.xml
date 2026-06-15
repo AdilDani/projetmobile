@@ -2,59 +2,80 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
+    android:orientation="vertical"
     android:background="@drawable/bg_card"
     android:padding="@dimen/space_l"
     android:layout_marginBottom="@dimen/space_m">
 
-    <ImageView
-        android:layout_width="@dimen/avatar_s"
-        android:layout_height="@dimen/avatar_s"
-        android:background="@drawable/bg_circle_pale"
-        android:padding="@dimen/space_s"
-        android:src="@drawable/ic_wrench"
-        android:tint="@color/warning"
-        android:contentDescription="@string/maintenance_title" />
-
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginStart="@dimen/space_m"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/entretien_type"
-            style="@style/TextBody"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/entretien_icon"
+            android:layout_width="@dimen/avatar_s"
+            android:layout_height="@dimen/avatar_s"
+            android:background="@drawable/bg_circle_pale"
+            android:padding="@dimen/space_s"
+            android:src="@drawable/ic_wrench"
+            android:tint="@color/warning"
+            android:contentDescription="@string/maintenance_title" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="@string/maintenance_title" />
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/space_m"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/entretien_type"
+                style="@style/TextBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/maintenance_title" />
+
+            <TextView
+                android:id="@+id/entretien_vehicle"
+                style="@style/TextSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/field_vehicle" />
+
+            <TextView
+                android:id="@+id/entretien_sub"
+                style="@style/TextCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/entretien_vehicle"
-            style="@style/TextSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_xs"
-            android:text="@string/field_vehicle" />
-
-        <TextView
-            android:id="@+id/entretien_date"
+            android:id="@+id/entretien_badge"
             style="@style/TextCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_xs"
-            android:text="@string/admin_date_sample" />
+            android:paddingStart="@dimen/space_s"
+            android:paddingEnd="@dimen/space_s"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:background="@drawable/bg_badge_green"
+            android:text="@string/tab_upcoming" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/entretien_echeance"
-        style="@style/TextCaption"
-        android:layout_width="wrap_content"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_mark_done"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textColor="@color/warning"
-        android:text="@string/tab_upcoming" />
+        android:layout_marginTop="@dimen/space_m"
+        android:text="@string/mark_done"
+        android:visibility="gone" />
 </LinearLayout>

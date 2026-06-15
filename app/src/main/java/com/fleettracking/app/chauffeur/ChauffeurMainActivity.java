@@ -1,10 +1,22 @@
 package com.fleettracking.app.chauffeur;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
+import com.fleettracking.app.util.EntretienNotificationWorker;
+
+import java.util.concurrent.TimeUnit;
 
 import com.fleettracking.app.R;
 import com.fleettracking.app.chauffeur.fragments.AccueilFragment;
@@ -27,6 +39,9 @@ public class ChauffeurMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chauffeur_main);
+
+        scheduleMaintenanceCheck();
+        requestNotificationPermission();
 
         bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnItemSelectedListener(item -> {
@@ -55,6 +70,24 @@ public class ChauffeurMainActivity extends AppCompatActivity {
             case TAB_VEHICULE: bottomNav.setSelectedItemId(R.id.nav_vehicule); break;
             case TAB_PROFIL: bottomNav.setSelectedItemId(R.id.nav_profil); break;
             default: bottomNav.setSelectedItemId(R.id.nav_accueil);
+        }
+    }
+
+    private void scheduleMaintenanceCheck() {
+        PeriodicWorkRequest work = new PeriodicWorkRequest.Builder(
+                EntretienNotificationWorker.class, 24, TimeUnit.HOURS)
+                .build();
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "maintenance_check", ExistingPeriodicWorkPolicy.KEEP, work);
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
+            }
         }
     }
 

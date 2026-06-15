@@ -263,6 +263,10 @@ public class Repository {
         enqueueObject(api.createEntretien(e), cb, K_ENTRETIENS, K_STATS);
     }
 
+    public void markEntretienDone(String id, RepoCallback<Entretien> cb) {
+        enqueueObject(api.markEntretienDone(id), cb, K_ENTRETIENS);
+    }
+
     public void createTrajet(Trajet t, RepoCallback<Trajet> cb) {
         enqueueObject(api.createTrajet(t), cb, K_TRAJETS);
     }

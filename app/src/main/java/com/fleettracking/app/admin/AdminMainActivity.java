@@ -1,10 +1,22 @@
 package com.fleettracking.app.admin;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
+import com.fleettracking.app.util.EntretienNotificationWorker;
+
+import java.util.concurrent.TimeUnit;
 
 import com.fleettracking.app.R;
 import com.fleettracking.app.admin.fragments.AdminAccueilFragment;
@@ -26,6 +38,9 @@ public class AdminMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
+
+        scheduleMaintenanceCheck();
+        requestNotificationPermission();
 
         bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnItemSelectedListener(item -> {
@@ -79,6 +94,24 @@ public class AdminMainActivity extends AppCompatActivity {
     public void goToVehicules() { bottomNav.setSelectedItemId(R.id.nav_vehicules); }
     public void goToChauffeurs() { bottomNav.setSelectedItemId(R.id.nav_chauffeurs); }
     public void goToCarte() { bottomNav.setSelectedItemId(R.id.nav_carte); }
+
+    private void scheduleMaintenanceCheck() {
+        PeriodicWorkRequest work = new PeriodicWorkRequest.Builder(
+                EntretienNotificationWorker.class, 24, TimeUnit.HOURS)
+                .build();
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "maintenance_check", ExistingPeriodicWorkPolicy.KEEP, work);
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
+            }
+        }
+    }
 
     private void show(@NonNull Fragment fragment) {
         getSupportFragmentManager()

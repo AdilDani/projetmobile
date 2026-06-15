@@ -52,4 +52,7 @@ dependencies {
 
     // Glide for images
     implementation 'com.github.bumptech.glide:glide:4.16.0'
+
+    // WorkManager for background notification checks
+    implementation 'androidx.work:work-runtime:2.9.0'
 }

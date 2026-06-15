@@ -1,7 +1,7 @@
 package com.fleettracking.app.admin;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +26,7 @@ import com.fleettracking.app.util.ImageUtils;
 import com.fleettracking.app.util.UiUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class VehiculeDetailsActivity extends AppCompatActivity {
@@ -38,7 +39,8 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
     private boolean isNew;
 
     private ImageView imgVehicle;
-    private EditText inputBrand, inputModel, inputPlate, inputYear, inputMileage, inputConsumption, inputVidange, inputControle;
+    private EditText inputBrand, inputModel, inputPlate, inputYear, inputMileage, inputConsumption;
+    private EditText inputVidangeCibleKm, inputCtDate;
     private Spinner spinnerStatus, spinnerDriver;
     private final List<Chauffeur> drivers = new ArrayList<>();
 
@@ -75,12 +77,13 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         inputYear = findViewById(R.id.input_year);
         inputMileage = findViewById(R.id.input_mileage);
         inputConsumption = findViewById(R.id.input_consumption);
-        inputVidange = findViewById(R.id.input_vidange);
-        inputControle = findViewById(R.id.input_controle);
+        inputVidangeCibleKm = findViewById(R.id.input_vidange_cible_km);
+        inputCtDate = findViewById(R.id.input_ct_date);
         spinnerStatus = findViewById(R.id.spinner_status);
         spinnerDriver = findViewById(R.id.spinner_driver);
 
-        // Keep the displayed name header in sync as the user types brand/model.
+        inputCtDate.setOnClickListener(v -> showDatePicker());
+
         android.text.TextWatcher nameWatcher = new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void afterTextChanged(android.text.Editable s) {}
@@ -94,7 +97,6 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         inputBrand.addTextChangedListener(nameWatcher);
         inputModel.addTextChangedListener(nameWatcher);
 
-        // A driver can only be assigned to a vehicle that is "En mission".
         spinnerStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
                 boolean enMission = getString(R.string.status_on_mission)
@@ -105,18 +107,13 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
             @Override public void onNothingSelected(AdapterView<?> p) {}
         });
 
-        // Load drivers first so the assignment spinner is ready, then the vehicle.
         loadDrivers(() -> {
             if (isNew) {
-                // Blank vehicle to be created. A new car starts "Disponible" with no
-                // driver, parked at the depot (its first "last known location").
                 current = new Vehicule();
                 current.statut = getString(R.string.status_available);
                 current.marque = "";
                 current.modele = "";
                 current.immatriculation = "";
-                current.prochaineVidange = "";
-                current.controleTechnique = "";
                 current.lat = FleetConfig.DEPOT_LAT;
                 current.lng = FleetConfig.DEPOT_LNG;
                 bind(current);
@@ -132,7 +129,6 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btn_change_photo).setOnClickListener(v -> picker.launch("image/*"));
-
         findViewById(R.id.btn_save).setOnClickListener(v -> save());
 
         findViewById(R.id.btn_see_map).setOnClickListener(v -> {
@@ -147,7 +143,19 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         });
     }
 
-    /** Loads the chauffeur list into the assignment spinner, then runs {@code then}. */
+    private void showDatePicker() {
+        Calendar cal = Calendar.getInstance();
+        String current_text = inputCtDate.getText().toString();
+        if (current_text.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            String[] parts = current_text.split("-");
+            cal.set(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]) - 1, Integer.parseInt(parts[2]));
+        }
+        new DatePickerDialog(this, (view, year, month, day) -> {
+            String date = String.format(java.util.Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, day);
+            inputCtDate.setText(date);
+        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
     private void loadDrivers(Runnable then) {
         repo.getChauffeurs(new RepoCallback<List<Chauffeur>>() {
             @Override public void onResult(List<Chauffeur> list) {
@@ -166,7 +174,6 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         });
     }
 
-    /** Selects the status spinner row matching the given status string. */
     private void selectStatus(String statut) {
         String[] values = {
                 getString(R.string.status_available),
@@ -179,7 +186,6 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         spinnerStatus.setSelection(0);
     }
 
-    /** Selects the driver spinner row matching the given chauffeur id (0 = none). */
     private void selectDriver(String conducteurId) {
         if (conducteurId != null) {
             for (int i = 0; i < drivers.size(); i++) {
@@ -203,8 +209,8 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         inputYear.setText(String.valueOf(x.annee));
         inputMileage.setText(String.valueOf(x.kilometrage));
         inputConsumption.setText(String.valueOf(x.consommation));
-        inputVidange.setText(x.prochaineVidange);
-        inputControle.setText(x.controleTechnique);
+        inputVidangeCibleKm.setText(x.vidangeCibleKm > 0 ? String.valueOf(x.vidangeCibleKm) : "");
+        inputCtDate.setText(x.controleTechniqueDate != null ? x.controleTechniqueDate : "");
 
         selectStatus(x.statut);
         selectDriver(x.conducteurId);
@@ -248,10 +254,12 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
             current.kilometrage = Integer.parseInt(inputMileage.getText().toString());
             current.consommation = Double.parseDouble(inputConsumption.getText().toString());
         } catch (NumberFormatException ignored) {}
-        current.prochaineVidange = inputVidange.getText().toString();
-        current.controleTechnique = inputControle.getText().toString();
+        try {
+            String vStr = inputVidangeCibleKm.getText().toString().trim();
+            current.vidangeCibleKm = vStr.isEmpty() ? 0 : Integer.parseInt(vStr);
+        } catch (NumberFormatException ignored) {}
+        current.controleTechniqueDate = inputCtDate.getText().toString().trim();
 
-        // Status + driver assignment. Only an "En mission" car carries a driver.
         String statut = spinnerStatus.getSelectedItem().toString();
         boolean enMission = getString(R.string.status_on_mission).equals(statut);
         if (enMission) {
@@ -266,11 +274,11 @@ public class VehiculeDetailsActivity extends AppCompatActivity {
         }
         current.statut = statut;
 
-        final String localPhoto = current.photo; // preserve in case server response strips it
+        final String localPhoto = current.photo;
         RepoCallback<Vehicule> cb = new RepoCallback<Vehicule>() {
             @Override public void onResult(Vehicule saved) {
                 if (saved != null) {
-                    if (saved.photo == null) saved.photo = localPhoto; // server may not echo large fields
+                    if (saved.photo == null) saved.photo = localPhoto;
                     current = saved;
                     bind(saved);
                 }

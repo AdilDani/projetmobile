@@ -139,8 +139,32 @@
     <string name="maintenance_title">Entretiens</string>
     <string name="tab_upcoming">À venir</string>
     <string name="tab_history">Historique</string>
-    <string name="due_in_days">Dans %1$d jours</string>
-    <string name="due_in_2days">Dans 2 jours</string>
+    <string name="due_in_days">Dans %1$d j</string>
+    <string name="overdue_by_days">En retard %1$d j</string>
+    <string name="due_today">Aujourd\'hui</string>
+    <string name="due_in_km">Dans %1$d km</string>
+    <string name="overdue_by_km">Dépassé %1$d km</string>
+    <string name="done_on">Effectué le %1$s</string>
+    <string name="on_time">À temps</string>
+    <string name="mark_done">Marquer effectué</string>
+    <string name="mark_done_confirm">Confirmer cet entretien comme effectué ?</string>
+    <string name="mark_done_confirm_title">Entretien effectué</string>
+    <string name="confirm">Confirmer</string>
+    <string name="add_entretien_title">Nouvel entretien</string>
+    <string name="label_entretien_type">Type d\'entretien</string>
+    <string name="label_target_km">Kilométrage cible</string>
+    <string name="label_target_date">Date cible</string>
+    <string name="label_basis_km">Basé sur le kilométrage</string>
+    <string name="label_basis_date">Basé sur la date</string>
+    <string name="label_vidange_cible_km">Cible vidange (km)</string>
+    <string name="label_ct_date">Date contrôle technique</string>
+    <string name="hint_date_format">aaaa-mm-jj</string>
+    <string name="notif_channel_maintenance_id">fleet_maintenance</string>
+    <string name="notif_channel_maintenance_name">Entretiens</string>
+    <string name="notif_channel_maintenance_desc">Alertes d\'entretien de véhicules</string>
+    <string name="notif_maintenance_title">Entretien requis</string>
+    <string name="notif_maintenance_overdue">%1$s — %2$s est en retard !</string>
+    <string name="notif_maintenance_soon">%1$s — %2$s est proche</string>
 
     <!-- Historique -->
     <string name="history_title">Historique</string>

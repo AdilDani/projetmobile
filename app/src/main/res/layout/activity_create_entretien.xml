@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg">
+
+    <include layout="@layout/toolbar_back" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_l">
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/field_vehicle" />
+            <Spinner android:id="@+id/spinner_vehicule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_m" />
+
+            <TextView style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_entretien_type" />
+            <EditText android:id="@+id/input_type" style="@style/Input"
+                android:inputType="text" android:autofillHints="" />
+
+            <RadioGroup
+                android:id="@+id/radio_basis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/space_m"
+                android:layout_marginBottom="@dimen/space_m">
+
+                <RadioButton
+                    android:id="@+id/radio_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_basis_date"
+                    android:checked="true" />
+
+                <RadioButton
+                    android:id="@+id/radio_km"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_basis_km" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/label_target"
+                style="@style/FieldLabel"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/label_target_date" />
+            <EditText android:id="@+id/input_target_date" style="@style/Input"
+                android:hint="@string/hint_date_format"
+                android:focusable="false"
+                android:clickable="true"
+                android:autofillHints="" />
+            <EditText android:id="@+id/input_target_km" style="@style/Input"
+                android:inputType="number"
+                android:hint="@string/label_target_km"
+                android:visibility="gone"
+                android:autofillHints="" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save"
+                style="@style/PrimaryButton"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/save_changes" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

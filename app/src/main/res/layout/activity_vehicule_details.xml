@@ -116,15 +116,18 @@
 
             <TextView style="@style/FieldLabel"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="@string/label_next_service" />
-            <EditText android:id="@+id/input_vidange" style="@style/Input"
-                android:inputType="text" android:autofillHints="" />
+                android:text="@string/label_vidange_cible_km" />
+            <EditText android:id="@+id/input_vidange_cible_km" style="@style/Input"
+                android:inputType="number" android:autofillHints="" />
 
             <TextView style="@style/FieldLabel"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="@string/label_technical_check" />
-            <EditText android:id="@+id/input_controle" style="@style/Input"
-                android:inputType="text" android:autofillHints="" />
+                android:text="@string/label_ct_date" />
+            <EditText android:id="@+id/input_ct_date" style="@style/Input"
+                android:hint="@string/hint_date_format"
+                android:focusable="false"
+                android:clickable="true"
+                android:autofillHints="" />
 
             <TextView style="@style/FieldLabel"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
