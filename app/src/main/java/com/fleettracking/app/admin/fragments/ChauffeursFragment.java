@@ -27,10 +27,13 @@ import com.fleettracking.app.adapters.ChauffeurAdapter;
 import com.fleettracking.app.data.RepoCallback;
 import com.fleettracking.app.data.Repository;
 import com.fleettracking.app.model.Chauffeur;
+import com.fleettracking.app.model.Vehicule;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnChauffeurAction {
 
@@ -91,10 +94,29 @@ public class ChauffeursFragment extends Fragment implements ChauffeurAdapter.OnC
 
     private void load() {
         repo.getChauffeurs(new RepoCallback<List<Chauffeur>>() {
-            @Override public void onResult(List<Chauffeur> list) {
-                all.clear();
-                all.addAll(list);
-                filter(search.getText().toString());
+            @Override public void onResult(List<Chauffeur> chauffeurs) {
+                // Resolve vehicle name from the vehicle list (vehiculeAffecte isn't persisted on backend)
+                repo.getVehicules(new RepoCallback<List<Vehicule>>() {
+                    @Override public void onResult(List<Vehicule> vehicules) {
+                        Map<String, String> vehNames = new HashMap<>();
+                        for (Vehicule v : vehicules) {
+                            if (v.conducteurId != null && !v.conducteurId.isEmpty()) {
+                                vehNames.put(v.conducteurId, v.getNomComplet());
+                            }
+                        }
+                        for (Chauffeur c : chauffeurs) {
+                            c.vehiculeAffecte = vehNames.get(c.id);
+                        }
+                        all.clear();
+                        all.addAll(chauffeurs);
+                        if (isAdded()) filter(search.getText().toString());
+                    }
+                    @Override public void onError(String m) {
+                        all.clear();
+                        all.addAll(chauffeurs);
+                        if (isAdded()) filter(search.getText().toString());
+                    }
+                });
             }
             @Override public void onError(String message) { /* keep current list */ }
         });

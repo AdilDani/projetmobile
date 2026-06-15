@@ -23,7 +23,7 @@ public class Trajet {
     private String arrivee;
     private String heureDepart;
     private String heureArrivee;
-    private int distanceKm;
+    private double distanceKm;
     private String duree;
     private int vitesseMoyenne;
     private double consommation;
@@ -61,8 +61,8 @@ public class Trajet {
     public void setHeureDepart(String heureDepart) { this.heureDepart = heureDepart; }
     public String getHeureArrivee() { return heureArrivee; }
     public void setHeureArrivee(String heureArrivee) { this.heureArrivee = heureArrivee; }
-    public int getDistanceKm() { return distanceKm; }
-    public void setDistanceKm(int distanceKm) { this.distanceKm = distanceKm; }
+    public double getDistanceKm() { return distanceKm; }
+    public void setDistanceKm(double distanceKm) { this.distanceKm = distanceKm; }
     public String getDuree() { return duree; }
     public void setDuree(String duree) { this.duree = duree; }
     public int getVitesseMoyenne() { return vitesseMoyenne; }

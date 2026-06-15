@@ -12,6 +12,7 @@ import com.fleettracking.app.R;
 import com.fleettracking.app.model.Trajet;
 
 import java.util.List;
+import java.util.Locale;
 
 public class TrajetAdapter extends RecyclerView.Adapter<TrajetAdapter.VH> {
 
@@ -45,7 +46,7 @@ public class TrajetAdapter extends RecyclerView.Adapter<TrajetAdapter.VH> {
         } else {
             h.times.setText("");
         }
-        h.distance.setText(t.distanceKm + " km");
+        h.distance.setText(String.format(Locale.getDefault(), "%.1f km", t.distanceKm));
         h.duration.setText(t.duree != null ? t.duree : "—");
         h.itemView.setOnClickListener(v -> { if (listener != null) listener.onClick(t); });
     }

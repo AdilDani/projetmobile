@@ -39,7 +39,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AdminAccueilFragment extends Fragment implements OnMapReadyCallback {
 
@@ -60,6 +63,8 @@ public class AdminAccueilFragment extends Fragment implements OnMapReadyCallback
         repo = new Repository(requireContext());
 
         ((TextView) v.findViewById(R.id.toolbar_title)).setText(R.string.nav_accueil);
+        ((TextView) v.findViewById(R.id.text_today_date)).setText(
+                new SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(new Date()));
         v.findViewById(R.id.btn_profile).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), ProfilActivity.class)));
 
@@ -125,9 +130,9 @@ public class AdminAccueilFragment extends Fragment implements OnMapReadyCallback
     }
 
     private int vehicleColor(String statut) {
-        if ("En mission".equals(statut))       return 0xFFE65100;
+        if ("En trajet".equals(statut))        return 0xFF2E7D32;
+        if ("Assigné".equals(statut))          return 0xFFE65100;
         if ("Indisponible".equals(statut))     return 0xFF757575;
-        if ("Maintenance".equals(statut))      return 0xFF6A1B9A;
         return 0xFF1565C0;
     }
 

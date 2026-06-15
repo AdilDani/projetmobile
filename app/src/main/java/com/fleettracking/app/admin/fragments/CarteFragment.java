@@ -150,28 +150,27 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    /** Orange pin for "En mission", grey for unavailable, blue for available. */
+    /** Dark teal depot marker — drawn at 2× size so it never hides under vehicle pins. */
+    private BitmapDescriptor depotIcon() {
+        return pinBitmap(0xFF00695C, R.drawable.ic_warehouse, 2.0f);
+    }
+
     private BitmapDescriptor vehicleIcon(String statut) {
         int color;
-        if ("En mission".equals(statut))       color = 0xFFE65100;  // deep orange
-        else if ("Indisponible".equals(statut)) color = 0xFF757575;  // grey
-        else if ("Maintenance".equals(statut))  color = 0xFF6A1B9A;  // purple
-        else                                    color = 0xFF1565C0;  // blue = available
-        return pinBitmap(color, R.drawable.ic_truck);
+        if ("En trajet".equals(statut))         color = 0xFF2E7D32;
+        else if ("Assigné".equals(statut))      color = 0xFFE65100;
+        else if ("Indisponible".equals(statut)) color = 0xFF757575;
+        else                                    color = 0xFF1565C0;
+        return pinBitmap(color, R.drawable.ic_truck, 1.0f);
     }
 
-    /** Dark teal diamond-shaped depot marker with warehouse icon. */
-    private BitmapDescriptor depotIcon() {
-        return pinBitmap(0xFF00695C, R.drawable.ic_warehouse);
-    }
-
-    private BitmapDescriptor pinBitmap(int bgColor, int iconRes) {
+    private BitmapDescriptor pinBitmap(int bgColor, int iconRes, float scale) {
         float density = requireContext().getResources().getDisplayMetrics().density;
-        int diameter = (int)(44 * density);
-        int tail     = (int)(14 * density);
+        int diameter = (int)(44 * density * scale);
+        int tail     = (int)(14 * density * scale);
         Bitmap bmp = Bitmap.createBitmap(diameter, diameter + tail, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
-        float cx = diameter / 2f, cy = diameter / 2f, r = cy - 2 * density;
+        float cx = diameter / 2f, cy = diameter / 2f, r = cy - 2 * density * scale;
 
         Paint body = new Paint(Paint.ANTI_ALIAS_FLAG);
         body.setColor(bgColor);
@@ -179,20 +178,20 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
 
         Paint ring = new Paint(Paint.ANTI_ALIAS_FLAG);
         ring.setColor(Color.WHITE); ring.setStyle(Paint.Style.STROKE);
-        ring.setStrokeWidth(2 * density);
-        canvas.drawCircle(cx, cy, r - density, ring);
+        ring.setStrokeWidth(2 * density * scale);
+        canvas.drawCircle(cx, cy, r - density * scale, ring);
 
         Path tailPath = new Path();
-        float tw = 6 * density;
-        tailPath.moveTo(cx - tw, diameter - 4 * density);
+        float tw = 6 * density * scale;
+        tailPath.moveTo(cx - tw, diameter - 4 * density * scale);
         tailPath.lineTo(cx + tw, diameter - 4 * density);
-        tailPath.lineTo(cx, diameter + tail - density);
+        tailPath.lineTo(cx, diameter + tail - density * scale);
         tailPath.close();
         canvas.drawPath(tailPath, body);
 
         Drawable icon = ContextCompat.getDrawable(requireContext(), iconRes);
         if (icon != null) {
-            int pad = (int)(11 * density);
+            int pad = (int)(11 * density * scale);
             icon.setBounds(pad, pad, diameter - pad, diameter - pad);
             DrawableCompat.setTint(DrawableCompat.wrap(icon.mutate()), Color.WHITE);
             icon.draw(canvas);

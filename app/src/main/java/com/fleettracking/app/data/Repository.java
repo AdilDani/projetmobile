@@ -3,6 +3,7 @@ package com.fleettracking.app.data;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.fleettracking.app.model.AdminUser;
 import com.fleettracking.app.model.Chauffeur;
 import com.fleettracking.app.model.Entretien;
 import com.fleettracking.app.model.Incident;
@@ -120,6 +121,14 @@ public class Repository {
     }
 
     // ---------------------------------------------------------------- reads
+
+    public void getAdmin(String id, RepoCallback<AdminUser> cb) {
+        enqueueObject(api.getAdmin(id), cb);
+    }
+
+    public void updateAdmin(String id, AdminUser a, RepoCallback<AdminUser> cb) {
+        enqueueObject(api.updateAdmin(id, a), cb);
+    }
 
     public void getVehicules(RepoCallback<List<Vehicule>> cb) {
         fetchList(api.getVehicules(), K_VEHICULES,

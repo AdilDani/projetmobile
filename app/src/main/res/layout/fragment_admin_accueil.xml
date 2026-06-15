@@ -33,10 +33,10 @@
                     android:text="@string/admin_hello" />
 
                 <TextView
+                    android:id="@+id/text_today_date"
                     style="@style/TextSecondary"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/admin_date_sample" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <TextView

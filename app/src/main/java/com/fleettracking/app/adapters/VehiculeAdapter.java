@@ -43,8 +43,7 @@ public class VehiculeAdapter extends RecyclerView.Adapter<VehiculeAdapter.VH> {
         Vehicule v = items.get(position);
         h.name.setText(v.getNomComplet());
         h.plate.setText(v.immatriculation);
-        h.status.setText(v.statut);
-        h.status.setTextColor(UiUtils.statusColor(h.status.getContext(), v.statut));
+        UiUtils.applyStatusChip(h.status, v.statut);
         ImageUtils.bind(h.image, v.photo, R.drawable.ic_truck);
         h.itemView.setOnClickListener(x -> {
             if (listener != null) listener.onClick(v);

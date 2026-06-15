@@ -89,8 +89,27 @@ public class TripManager {
 
     public boolean isTripActive() { return isTripActive; }
 
+    public void startTrip(String vehicleId, String vehiculeNom, String chauffeurId,
+                          Runnable onStarted, Runnable onNotAssigned) {
+        repo.getVehicule(vehicleId, new RepoCallback<com.fleettracking.app.model.Vehicule>() {
+            @Override public void onResult(com.fleettracking.app.model.Vehicule v) {
+                if (!chauffeurId.equals(v.conducteurId)) {
+                    if (onNotAssigned != null) onNotAssigned.run();
+                } else {
+                    doStartTrip(vehicleId, vehiculeNom, chauffeurId);
+                    if (onStarted != null) onStarted.run();
+                }
+            }
+            @Override public void onError(String m) {
+                // Offline — proceed optimistically
+                doStartTrip(vehicleId, vehiculeNom, chauffeurId);
+                if (onStarted != null) onStarted.run();
+            }
+        });
+    }
+
     @SuppressLint("MissingPermission")
-    public void startTrip(String vehicleId, String vehiculeNom, String chauffeurId) {
+    private void doStartTrip(String vehicleId, String vehiculeNom, String chauffeurId) {
         this.activeVehicleId = vehicleId;
         this.activeVehiculeNom = vehiculeNom;
         this.activeChauffeurId = chauffeurId;
@@ -148,7 +167,7 @@ public class TripManager {
         t.heureArrivee = endTime;
         t.duree = duree;
         t.enCours = false;
-        t.distanceKm = (int) Math.round(totalKm);
+        t.distanceKm = Math.round(totalKm * 10.0) / 10.0;
         t.vitesseMoyenne = computeAvgSpeed(totalKm, startTime, endTime);
         if (firstLocation != null) {
             t.departLat = firstLocation.getLatitude();
@@ -162,6 +181,19 @@ public class TripManager {
         repo.updateTrajet(trajetId, t, new RepoCallback<Trajet>() {
             @Override public void onResult(Trajet result) {}
             @Override public void onError(String message) {}
+        });
+
+        // Reset vehicle status back to Assigné now that the trip is done
+        final String finishedVehicleId = activeVehicleId;
+        repo.getVehicule(finishedVehicleId, new RepoCallback<com.fleettracking.app.model.Vehicule>() {
+            @Override public void onResult(com.fleettracking.app.model.Vehicule v) {
+                v.statut = "Assigné";
+                repo.updateVehicule(v.id, v, new RepoCallback<com.fleettracking.app.model.Vehicule>() {
+                    @Override public void onResult(com.fleettracking.app.model.Vehicule x) {}
+                    @Override public void onError(String m) {}
+                });
+            }
+            @Override public void onError(String m) {}
         });
 
         activeVehicleId = null;
@@ -216,7 +248,7 @@ public class TripManager {
                 v.lat = loc.getLatitude();
                 v.lng = loc.getLongitude();
                 v.vitesse = loc.hasSpeed() ? Math.round(loc.getSpeed() * 3.6f) : 0;
-                v.statut = "En mission";
+                v.statut = "En trajet";
                 repo.updateVehicule(v.id, v, new RepoCallback<Vehicule>() {
                     @Override public void onResult(Vehicule x) {}
                     @Override public void onError(String m) {}

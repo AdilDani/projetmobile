@@ -10,8 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.PeriodicWorkRequest;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import com.fleettracking.app.util.EntretienNotificationWorker;
@@ -74,11 +73,9 @@ public class ChauffeurMainActivity extends AppCompatActivity {
     }
 
     private void scheduleMaintenanceCheck() {
-        PeriodicWorkRequest work = new PeriodicWorkRequest.Builder(
-                EntretienNotificationWorker.class, 24, TimeUnit.HOURS)
-                .build();
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                "maintenance_check", ExistingPeriodicWorkPolicy.KEEP, work);
+        // Fire immediately on launch; the worker self-reschedules every 3 minutes
+        WorkManager.getInstance(this).enqueue(
+                new OneTimeWorkRequest.Builder(EntretienNotificationWorker.class).build());
     }
 
     private void requestNotificationPermission() {

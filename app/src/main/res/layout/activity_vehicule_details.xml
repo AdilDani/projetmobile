@@ -20,6 +20,7 @@
             android:orientation="vertical"
             android:padding="@dimen/space_l">
 
+            <!-- Header card: photo + name + status badge -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +44,7 @@
                         android:src="@drawable/ic_truck"
                         android:tint="@color/text_secondary"
                         android:contentDescription="@string/cd_vehicle_image" />
-                    
+
                     <ImageView
                         android:layout_width="@dimen/icon_m"
                         android:layout_height="@dimen/icon_m"
@@ -61,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_m"
                     android:text="@string/app_name" />
-                
+
                 <TextView
                     android:id="@+id/text_vehicle_status"
                     style="@style/TextSecondary"
@@ -71,7 +72,7 @@
                     android:text="@string/status_available" />
             </LinearLayout>
 
-            <!-- Editable fields -->
+            <!-- Vehicle info fields -->
             <TextView
                 style="@style/SectionLabel"
                 android:layout_width="wrap_content"
@@ -96,11 +97,38 @@
             <EditText android:id="@+id/input_plate" style="@style/Input"
                 android:inputType="text" android:autofillHints="" />
 
-            <TextView style="@style/FieldLabel"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="@string/label_year" />
-            <EditText android:id="@+id/input_year" style="@style/Input"
-                android:inputType="number" android:autofillHints="" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="@dimen/space_s">
+
+                    <TextView style="@style/FieldLabel"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/label_year" />
+                    <EditText android:id="@+id/input_year" style="@style/Input"
+                        android:inputType="number" android:autofillHints="" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView style="@style/FieldLabel"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/label_consumption" />
+                    <EditText android:id="@+id/input_consumption" style="@style/Input"
+                        android:inputType="numberDecimal" android:autofillHints="" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView style="@style/FieldLabel"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -110,14 +138,8 @@
 
             <TextView style="@style/FieldLabel"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="@string/label_consumption" />
-            <EditText android:id="@+id/input_consumption" style="@style/Input"
-                android:inputType="numberDecimal" android:autofillHints="" />
-
-            <TextView style="@style/FieldLabel"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="@string/label_vidange_cible_km" />
-            <EditText android:id="@+id/input_vidange_cible_km" style="@style/Input"
+                android:text="@string/label_vidange_restants_km" />
+            <EditText android:id="@+id/input_vidange_restants_km" style="@style/Input"
                 android:inputType="number" android:autofillHints="" />
 
             <TextView style="@style/FieldLabel"
@@ -129,74 +151,171 @@
                 android:clickable="true"
                 android:autofillHints="" />
 
-            <TextView style="@style/FieldLabel"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="@string/label_status" />
-            <Spinner android:id="@+id/spinner_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xs"
-                android:entries="@array/vehicle_statuses" />
-
-            <TextView
-                style="@style/SectionLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/assigned_driver" />
-
-            <Spinner android:id="@+id/spinner_driver"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_m" />
-
+            <!-- ── Disponibilité toggle (hidden when Assigné or En trajet) ── -->
             <LinearLayout
-                android:id="@+id/driver_card"
+                android:id="@+id/section_availability"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/SectionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_disponibilite" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/space_xs">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_toggle_disponible"
+                        style="@style/PrimaryButton"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/space_s"
+                        android:text="@string/status_available" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_toggle_indisponible"
+                        style="@style/SecondaryButton"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/status_unavailable" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ── En trajet banner (hidden by default) ── -->
+            <LinearLayout
+                android:id="@+id/section_en_trajet_banner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:background="@drawable/bg_card_clickable"
-                android:padding="@dimen/space_l"
-                android:elevation="@dimen/elevation_card">
+                android:background="@drawable/bg_chip_warning"
+                android:padding="@dimen/space_m"
+                android:layout_marginTop="@dimen/space_m"
+                android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/img_driver"
-                    android:layout_width="@dimen/avatar_m"
-                    android:layout_height="@dimen/avatar_m"
-                    android:background="@drawable/bg_circle_pale"
-                    android:padding="@dimen/space_m"
-                    android:src="@drawable/ic_person"
-                    android:tint="@color/primary"
-                    android:contentDescription="@string/cd_avatar" />
+                    android:layout_width="@dimen/icon_s"
+                    android:layout_height="@dimen/icon_s"
+                    android:src="@drawable/ic_warning"
+                    android:tint="@color/warning"
+                    android:layout_marginEnd="@dimen/space_s" />
 
-                <LinearLayout
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="@dimen/space_m"
-                    android:orientation="vertical">
+                    android:text="@string/vehicle_en_trajet_banner"
+                    android:textColor="@color/warning"
+                    android:textSize="@dimen/text_small" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/driver_name"
-                        style="@style/TextBody"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/assigned_driver" />
+            <!-- ── Assign driver section (shown when Disponible) ── -->
+            <LinearLayout
+                android:id="@+id/section_assign_driver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/driver_phone"
-                        style="@style/TextSecondary"
-                        android:layout_width="wrap_content"
+                <TextView
+                    style="@style/SectionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_assign_driver" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:background="@drawable/bg_input"
+                    android:paddingStart="@dimen/space_m"
+                    android:paddingEnd="@dimen/space_xs">
+
+                    <Spinner
+                        android:id="@+id/spinner_driver"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- ── Current driver section (shown when Assigné or En trajet) ── -->
+            <LinearLayout
+                android:id="@+id/section_current_driver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/SectionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assigned_driver" />
+
+                <LinearLayout
+                    android:id="@+id/driver_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_card_clickable"
+                    android:padding="@dimen/space_l"
+                    android:elevation="@dimen/elevation_card">
+
+                    <ImageView
+                        android:id="@+id/img_driver"
+                        android:layout_width="@dimen/avatar_m"
+                        android:layout_height="@dimen/avatar_m"
+                        android:background="@drawable/bg_circle_pale"
+                        android:padding="@dimen/space_m"
+                        android:src="@drawable/ic_person"
+                        android:tint="@color/primary"
+                        android:contentDescription="@string/cd_avatar" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_phone" />
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/space_m"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/driver_name"
+                            style="@style/TextBody"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="@string/assigned_driver" />
+
+                        <TextView
+                            android:id="@+id/driver_phone"
+                            style="@style/TextSecondary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_phone" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_m"
+                        android:layout_height="@dimen/icon_m"
+                        android:src="@drawable/ic_chevron_right"
+                        android:tint="@color/text_tertiary" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="@dimen/icon_m"
-                    android:layout_height="@dimen/icon_m"
-                    android:src="@drawable/ic_chevron_right"
-                    android:tint="@color/text_tertiary" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_retirer"
+                    style="@style/SecondaryButton"
+                    android:layout_marginTop="@dimen/space_m"
+                    android:textColor="@color/danger"
+                    app:strokeColor="@color/danger"
+                    android:text="@string/btn_retirer_chauffeur" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton

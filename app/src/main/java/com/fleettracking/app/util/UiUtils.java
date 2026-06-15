@@ -16,14 +16,14 @@ public final class UiUtils {
         int res;
         switch (statut) {
             case "Disponible":
-                res = R.color.success; break;
-            case "En mission":
-                res = R.color.info; break;
-            case "Indisponible":
-            case "Maintenance":
-                res = R.color.warning; break;
             case "Résolu":
                 res = R.color.success; break;
+            case "Assigné":
+                res = R.color.info; break;
+            case "En trajet":
+                res = R.color.primary; break;
+            case "Indisponible":
+                res = R.color.warning; break;
             case "En cours":
                 res = R.color.danger; break;
             default:
@@ -37,10 +37,11 @@ public final class UiUtils {
             case "Disponible":
             case "Résolu":
                 return R.drawable.bg_chip_success;
-            case "En mission":
+            case "Assigné":
                 return R.drawable.bg_chip_info;
+            case "En trajet":
+                return R.drawable.bg_chip_primary;
             case "Indisponible":
-            case "Maintenance":
                 return R.drawable.bg_chip_warning;
             case "En cours":
                 return R.drawable.bg_chip_danger;

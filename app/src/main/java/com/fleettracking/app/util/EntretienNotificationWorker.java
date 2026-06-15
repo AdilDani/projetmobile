@@ -3,6 +3,8 @@ package com.fleettracking.app.util;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -18,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class EntretienNotificationWorker extends Worker {
 
@@ -84,6 +87,12 @@ public class EntretienNotificationWorker extends Worker {
                 }
             }
         } catch (Exception ignored) {}
+
+        // Self-reschedule every 3 minutes (bypasses the 15-min PeriodicWorkRequest floor)
+        WorkManager.getInstance(getApplicationContext()).enqueue(
+                new OneTimeWorkRequest.Builder(EntretienNotificationWorker.class)
+                        .setInitialDelay(3, TimeUnit.MINUTES)
+                        .build());
 
         return Result.success();
     }

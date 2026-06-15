@@ -53,11 +53,16 @@
 
     <!-- Vehicle status -->
     <string name="status_available">Disponible</string>
-    <string name="status_on_mission">En mission</string>
+    <string name="status_assigned">Assigné</string>
+    <string name="status_en_trajet">En trajet</string>
     <string name="status_unavailable">Indisponible</string>
-    <string name="status_maintenance">Maintenance</string>
     <string name="driver_none">Aucun conducteur</string>
-    <string name="select_driver_required">Sélectionnez un conducteur pour une mission</string>
+    <string name="select_driver_required">Sélectionnez un conducteur pour affecter le véhicule</string>
+    <string name="vehicle_en_trajet_locked">Ce véhicule est en trajet — modification impossible</string>
+    <string name="label_disponibilite">Disponibilité</string>
+    <string name="label_assign_driver">Assigner un chauffeur</string>
+    <string name="btn_retirer_chauffeur">Retirer le chauffeur</string>
+    <string name="vehicle_en_trajet_banner">Ce véhicule est actuellement en trajet. Aucune modification n\'est possible.</string>
 
     <!-- Vehicle details -->
     <string name="vehicle_details_title">Détails véhicule</string>
@@ -97,7 +102,9 @@
     <string name="no_vehicle_assigned">Aucun véhicule affecté</string>
     <string name="label_license">Numéro de permis</string>
     <string name="section_credentials">Identifiants de connexion</string>
-    <string name="label_login">Identifiant (login)</string>
+    <string name="label_prenom">Prénom</string>
+    <string name="label_nom">Nom</string>
+    <string name="label_login">Identifiant</string>
     <string name="label_password">Mot de passe</string>
     <string name="save_changes">Enregistrer les modifications</string>
     <string name="saved_toast">Modifications enregistrées</string>
@@ -155,7 +162,7 @@
     <string name="label_target_date">Date cible</string>
     <string name="label_basis_km">Basé sur le kilométrage</string>
     <string name="label_basis_date">Basé sur la date</string>
-    <string name="label_vidange_cible_km">Cible vidange (km)</string>
+    <string name="label_vidange_restants_km">Km restants avant vidange</string>
     <string name="label_ct_date">Date contrôle technique</string>
     <string name="hint_date_format">aaaa-mm-jj</string>
     <string name="notif_channel_maintenance_id">fleet_maintenance</string>

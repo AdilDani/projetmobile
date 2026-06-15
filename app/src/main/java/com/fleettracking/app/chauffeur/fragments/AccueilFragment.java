@@ -117,9 +117,20 @@ public class AccueilFragment extends Fragment {
     private void startTripNow() {
         if (currentVehicule == null) return;
         String userId = new Prefs(requireContext()).getUserId();
-        TripManager.getInstance(requireContext()).startTrip(currentVehicule.id, currentVehicule.getNomComplet(), userId);
-        Toast.makeText(getContext(), R.string.trip_started, Toast.LENGTH_SHORT).show();
-        updateTripButton();
+        TripManager.getInstance(requireContext()).startTrip(
+                currentVehicule.id, currentVehicule.getNomComplet(), userId,
+                () -> {
+                    if (!isAdded()) return;
+                    Toast.makeText(getContext(), R.string.trip_started, Toast.LENGTH_SHORT).show();
+                    updateTripButton();
+                },
+                () -> {
+                    if (!isAdded()) return;
+                    Toast.makeText(getContext(),
+                            "Ce véhicule ne vous est plus assigné", Toast.LENGTH_LONG).show();
+                    currentVehicule = null;
+                    updateTripButton();
+                });
     }
 
     private void updateTripButton() {

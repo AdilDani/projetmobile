@@ -99,15 +99,12 @@ public class ChauffeurDetailsActivity extends AppCompatActivity {
                 oldVehicleId = null;
 
                 for (Vehicule v : list) {
-                    // Show only available vehicles, plus the one already assigned to this driver
                     boolean isAssigned = c.id != null && c.id.equals(v.conducteurId);
-                    if ("Disponible".equals(v.statut) || isAssigned) {
-                        availableVehicles.add(v);
-                        displayNames.add(v.getNomComplet() + " (" + v.immatriculation + ")");
-                        if (isAssigned) {
-                            selectedIndex = availableVehicles.size();
-                            oldVehicleId = v.id;
-                        }
+                    availableVehicles.add(v);
+                    displayNames.add(v.getNomComplet() + " (" + v.immatriculation + ")");
+                    if (isAssigned) {
+                        selectedIndex = availableVehicles.size();
+                        oldVehicleId = v.id;
                     }
                 }
 
@@ -156,6 +153,11 @@ public class ChauffeurDetailsActivity extends AppCompatActivity {
 
             int sel = spinnerVehicle.getSelectedItemPosition();
             Vehicule selectedVeh = (sel > 0) ? availableVehicles.get(sel - 1) : null;
+            if (selectedVeh != null && "En trajet".equals(selectedVeh.statut)) {
+                Toast.makeText(ChauffeurDetailsActivity.this,
+                        "Ce véhicule est en trajet et ne peut pas être réassigné", Toast.LENGTH_SHORT).show();
+                return;
+            }
             String newVehicleId = (selectedVeh != null) ? selectedVeh.id : null;
             c.vehiculeAffecte = (selectedVeh != null) ? selectedVeh.getNomComplet() : "";
 
@@ -209,7 +211,7 @@ public class ChauffeurDetailsActivity extends AppCompatActivity {
     private void assignNewVehicle(String newId) {
         repo.getVehicule(newId, new RepoCallback<Vehicule>() {
             @Override public void onResult(Vehicule v) {
-                v.statut = "En mission";
+                v.statut = "Assigné";
                 v.conducteurId = current.id;
                 repo.updateVehicule(v.id, v, new RepoCallback<Vehicule>() {
                     @Override public void onResult(Vehicule x) { finishWithSuccess(); }

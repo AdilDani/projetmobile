@@ -48,29 +48,6 @@
                         android:textSize="@dimen/text_small" />
                 </LinearLayout>
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="@dimen/icon_m"
-                        android:layout_height="@dimen/icon_m"
-                        android:layout_margin="@dimen/space_xs"
-                        android:src="@drawable/ic_bell"
-                        android:tint="@color/white"
-                        android:contentDescription="@string/cd_notifications" />
-
-                    <TextView
-                        android:layout_width="@dimen/badge_s"
-                        android:layout_height="@dimen/badge_s"
-                        android:layout_gravity="top|end"
-                        android:background="@drawable/bg_badge_red"
-                        android:gravity="center"
-                        android:text="@string/notif_badge_sample"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_micro"
-                        android:textStyle="bold" />
-                </FrameLayout>
             </LinearLayout>
 
             <LinearLayout

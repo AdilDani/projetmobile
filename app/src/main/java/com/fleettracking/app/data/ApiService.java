@@ -1,5 +1,6 @@
 package com.fleettracking.app.data;
 
+import com.fleettracking.app.model.AdminUser;
 import com.fleettracking.app.model.Chauffeur;
 import com.fleettracking.app.model.Entretien;
 import com.fleettracking.app.model.Incident;
@@ -38,6 +39,12 @@ public interface ApiService {
     Call<Vehicule> updateVehicule(@Path("id") String id, @Body Vehicule v);
     @DELETE("api/vehicules/{id}")
     Call<Void> deleteVehicule(@Path("id") String id);
+
+    // Admins
+    @GET("api/admins/{id}")
+    Call<AdminUser> getAdmin(@Path("id") String id);
+    @PUT("api/admins/{id}")
+    Call<AdminUser> updateAdmin(@Path("id") String id, @Body AdminUser a);
 
     // Chauffeurs
     @GET("api/chauffeurs")

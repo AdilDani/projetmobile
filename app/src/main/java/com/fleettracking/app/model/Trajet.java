@@ -10,7 +10,7 @@ public class Trajet {
     public String arrivee;
     public String heureDepart;
     public String heureArrivee;
-    public int distanceKm;
+    public double distanceKm;
     public String duree;
     public int vitesseMoyenne;
     public double consommation;   // L/100km
