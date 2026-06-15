@@ -12,6 +12,9 @@ public class Prefs {
     public static final String KEY_USER_ID = "user_id";    // backend id of logged-in user
     public static final String KEY_NAME = "name";          // display name of logged-in user
     public static final String KEY_NOTIFICATIONS = "notifications_enabled";
+    private static final String KEY_SAVED_LOGIN    = "saved_login";
+    private static final String KEY_SAVED_PASSWORD = "saved_password";
+    private static final String KEY_SAVED_ROLE     = "saved_role";
 
     public static final String ROLE_ADMIN = "admin";
     public static final String ROLE_CHAUFFEUR = "chauffeur";
@@ -44,6 +47,26 @@ public class Prefs {
 
     public boolean isNotificationsEnabled() { return sp.getBoolean(KEY_NOTIFICATIONS, true); }
     public void setNotificationsEnabled(boolean v) { sp.edit().putBoolean(KEY_NOTIFICATIONS, v).apply(); }
+
+    public void saveCredentials(String login, String password, String role) {
+        sp.edit()
+                .putString(KEY_SAVED_LOGIN, login)
+                .putString(KEY_SAVED_PASSWORD, password)
+                .putString(KEY_SAVED_ROLE, role)
+                .apply();
+    }
+
+    public void clearCredentials() {
+        sp.edit()
+                .remove(KEY_SAVED_LOGIN)
+                .remove(KEY_SAVED_PASSWORD)
+                .remove(KEY_SAVED_ROLE)
+                .apply();
+    }
+
+    public String getSavedLogin()    { return sp.getString(KEY_SAVED_LOGIN, null); }
+    public String getSavedPassword() { return sp.getString(KEY_SAVED_PASSWORD, null); }
+    public String getSavedRole()     { return sp.getString(KEY_SAVED_ROLE, null); }
 
     public void logout() { sp.edit().clear().apply(); }
 }

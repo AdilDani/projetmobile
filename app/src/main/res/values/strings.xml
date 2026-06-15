@@ -23,10 +23,8 @@
     <string name="login_title">Connexion</string>
     <string name="login_email_hint">Email</string>
     <string name="login_password_hint">Mot de passe</string>
-    <string name="login_forgot">Mot de passe oublié ?</string>
     <string name="login_button">Se connecter</string>
-    <string name="login_no_account">Vous n\'avez pas de compte ? </string>
-    <string name="login_signup">Inscrivez-vous</string>
+    <string name="login_remember_me">Se souvenir de moi</string>
     <string name="login_role_question">Se connecter en tant que :</string>
     <string name="role_admin">Administrateur</string>
     <string name="role_chauffeur">Chauffeur</string>
