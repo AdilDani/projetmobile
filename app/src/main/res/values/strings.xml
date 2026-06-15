@@ -78,6 +78,7 @@
 
     <!-- Map -->
     <string name="map_title">Carte</string>
+    <string name="depot_name">Dépôt / Entrepôt</string>
     <string name="map_speed_label">Vitesse :</string>
     <string name="filter">Filtrer</string>
 

@@ -16,14 +16,26 @@ import com.fleettracking.app.admin.AdminMainActivity;
 import com.fleettracking.app.admin.EntretiensActivity;
 import com.fleettracking.app.admin.IncidentsActivity;
 import com.fleettracking.app.admin.ProfilActivity;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.drawable.Drawable;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+
 import com.fleettracking.app.data.RepoCallback;
 import com.fleettracking.app.data.Repository;
 import com.fleettracking.app.data.Stats;
 import com.fleettracking.app.model.Vehicule;
+import com.fleettracking.app.util.FleetConfig;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -80,23 +92,68 @@ public class AdminAccueilFragment extends Fragment implements OnMapReadyCallback
         });
     }
 
+    private static final LatLng DEPOT = new LatLng(FleetConfig.DEPOT_LAT, FleetConfig.DEPOT_LNG);
+
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
-        LatLng center = new LatLng(33.5731, -7.5898);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 12f));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(DEPOT, 12f));
+
+        // Permanent depot pin
+        map.addMarker(new MarkerOptions()
+                .position(DEPOT)
+                .title(getString(R.string.depot_name))
+                .icon(pinBitmap(0xFF00695C, R.drawable.ic_warehouse))
+                .zIndex(0f));
+
         repo.getVehicules(new RepoCallback<List<Vehicule>>() {
             @Override public void onResult(List<Vehicule> list) {
                 if (googleMap == null) return;
                 for (Vehicule veh : list) {
+                    boolean hasPos = veh.lat != 0.0 || veh.lng != 0.0;
+                    LatLng pos = hasPos ? new LatLng(veh.lat, veh.lng) : DEPOT;
                     googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(veh.lat, veh.lng))
+                            .position(pos)
                             .title(veh.getNomComplet())
-                            .snippet(veh.immatriculation));
+                            .snippet(veh.immatriculation)
+                            .icon(pinBitmap(vehicleColor(veh.statut), R.drawable.ic_truck))
+                            .zIndex(1f));
                 }
             }
             @Override public void onError(String message) { /* no markers */ }
         });
+    }
+
+    private int vehicleColor(String statut) {
+        if ("En mission".equals(statut))       return 0xFFE65100;
+        if ("Indisponible".equals(statut))     return 0xFF757575;
+        if ("Maintenance".equals(statut))      return 0xFF6A1B9A;
+        return 0xFF1565C0;
+    }
+
+    private BitmapDescriptor pinBitmap(int bgColor, int iconRes) {
+        float d = getResources().getDisplayMetrics().density;
+        int diam = (int)(44 * d), tail = (int)(14 * d);
+        Bitmap bmp = Bitmap.createBitmap(diam, diam + tail, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp);
+        float cx = diam / 2f, cy = diam / 2f, r = cy - 2 * d;
+        Paint body = new Paint(Paint.ANTI_ALIAS_FLAG); body.setColor(bgColor);
+        canvas.drawCircle(cx, cy, r, body);
+        Paint ring = new Paint(Paint.ANTI_ALIAS_FLAG);
+        ring.setColor(Color.WHITE); ring.setStyle(Paint.Style.STROKE); ring.setStrokeWidth(2 * d);
+        canvas.drawCircle(cx, cy, r - d, ring);
+        Path tp = new Path(); float tw = 6 * d;
+        tp.moveTo(cx - tw, diam - 4 * d); tp.lineTo(cx + tw, diam - 4 * d);
+        tp.lineTo(cx, diam + tail - d); tp.close();
+        canvas.drawPath(tp, body);
+        Drawable icon = ContextCompat.getDrawable(requireContext(), iconRes);
+        if (icon != null) {
+            int pad = (int)(11 * d);
+            icon.setBounds(pad, pad, diam - pad, diam - pad);
+            DrawableCompat.setTint(DrawableCompat.wrap(icon.mutate()), Color.WHITE);
+            icon.draw(canvas);
+        }
+        return BitmapDescriptorFactory.fromBitmap(bmp);
     }
 
     @Override public void onResume() { super.onResume(); if (mapView != null) mapView.onResume(); }

@@ -31,7 +31,7 @@ public class StatsController {
         return new StatsResponse(
                 vehicules.count(),
                 chauffeurs.count(),
-                incidents.count(),
+                incidents.countByStatut("En cours"),   // unresolved only
                 entretiens.count());
     }
 }

@@ -20,15 +20,27 @@ import com.fleettracking.app.admin.VehiculeDetailsActivity;
 import com.fleettracking.app.data.RepoCallback;
 import com.fleettracking.app.data.Repository;
 import com.fleettracking.app.model.Vehicule;
+import com.fleettracking.app.util.FleetConfig;
 import com.fleettracking.app.util.ImageUtils;
 import com.fleettracking.app.util.UiUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.drawable.Drawable;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import java.util.List;
 
@@ -103,22 +115,89 @@ public class CarteFragment extends Fragment implements OnMapReadyCallback {
         refreshMarkers();
     }
 
+    private static final LatLng DEPOT = new LatLng(FleetConfig.DEPOT_LAT, FleetConfig.DEPOT_LNG);
+
     private void refreshMarkers() {
         if (repo == null) return;
         repo.getVehicules(new RepoCallback<List<Vehicule>>() {
             @Override public void onResult(List<Vehicule> list) {
                 if (googleMap == null || !isAdded()) return;
                 googleMap.clear();
+
+                // Permanent depot / warehouse pin
+                Marker depot = googleMap.addMarker(new MarkerOptions()
+                        .position(DEPOT)
+                        .title(getString(R.string.depot_name))
+                        .icon(depotIcon())
+                        .zIndex(0f));
+
                 for (Vehicule veh : list) {
+                    // Fall back to depot when position has never been set
+                    boolean hasPosition = veh.lat != 0.0 || veh.lng != 0.0;
+                    LatLng pos = hasPosition ? new LatLng(veh.lat, veh.lng) : DEPOT;
+
+                    BitmapDescriptor icon = vehicleIcon(veh.statut);
                     Marker m = googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(veh.lat, veh.lng))
+                            .position(pos)
                             .title(veh.getNomComplet())
-                            .snippet(veh.immatriculation));
+                            .snippet(veh.immatriculation + (hasPosition ? "" : " — dépôt"))
+                            .icon(icon)
+                            .zIndex(1f));
                     if (m != null) m.setTag(veh);
                 }
             }
             @Override public void onError(String message) { /* keep existing markers */ }
         });
+    }
+
+    /** Orange pin for "En mission", grey for unavailable, blue for available. */
+    private BitmapDescriptor vehicleIcon(String statut) {
+        int color;
+        if ("En mission".equals(statut))       color = 0xFFE65100;  // deep orange
+        else if ("Indisponible".equals(statut)) color = 0xFF757575;  // grey
+        else if ("Maintenance".equals(statut))  color = 0xFF6A1B9A;  // purple
+        else                                    color = 0xFF1565C0;  // blue = available
+        return pinBitmap(color, R.drawable.ic_truck);
+    }
+
+    /** Dark teal diamond-shaped depot marker with warehouse icon. */
+    private BitmapDescriptor depotIcon() {
+        return pinBitmap(0xFF00695C, R.drawable.ic_warehouse);
+    }
+
+    private BitmapDescriptor pinBitmap(int bgColor, int iconRes) {
+        float density = requireContext().getResources().getDisplayMetrics().density;
+        int diameter = (int)(44 * density);
+        int tail     = (int)(14 * density);
+        Bitmap bmp = Bitmap.createBitmap(diameter, diameter + tail, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp);
+        float cx = diameter / 2f, cy = diameter / 2f, r = cy - 2 * density;
+
+        Paint body = new Paint(Paint.ANTI_ALIAS_FLAG);
+        body.setColor(bgColor);
+        canvas.drawCircle(cx, cy, r, body);
+
+        Paint ring = new Paint(Paint.ANTI_ALIAS_FLAG);
+        ring.setColor(Color.WHITE); ring.setStyle(Paint.Style.STROKE);
+        ring.setStrokeWidth(2 * density);
+        canvas.drawCircle(cx, cy, r - density, ring);
+
+        Path tailPath = new Path();
+        float tw = 6 * density;
+        tailPath.moveTo(cx - tw, diameter - 4 * density);
+        tailPath.lineTo(cx + tw, diameter - 4 * density);
+        tailPath.lineTo(cx, diameter + tail - density);
+        tailPath.close();
+        canvas.drawPath(tailPath, body);
+
+        Drawable icon = ContextCompat.getDrawable(requireContext(), iconRes);
+        if (icon != null) {
+            int pad = (int)(11 * density);
+            icon.setBounds(pad, pad, diameter - pad, diameter - pad);
+            DrawableCompat.setTint(DrawableCompat.wrap(icon.mutate()), Color.WHITE);
+            icon.draw(canvas);
+        }
+        return BitmapDescriptorFactory.fromBitmap(bmp);
     }
 
     /** Populate and reveal the bottom card; a second tap opens the full detail. */

@@ -182,7 +182,7 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
                 incident.immatriculation = plate;
                 incident.type = type;
                 incident.description = description;
-                incident.date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+                incident.date = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
                 incident.statut = "En cours";
                 incident.images = images;
 
