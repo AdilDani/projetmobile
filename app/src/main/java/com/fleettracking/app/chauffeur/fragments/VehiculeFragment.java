@@ -64,8 +64,10 @@ public class VehiculeFragment extends Fragment {
         addRow(R.drawable.ic_speed, R.string.label_mileage,
                 String.format("%,d km", x.kilometrage), textPrimary);
         addFuelRow(x.carburantPct);
-        addRow(R.drawable.ic_wrench, R.string.label_next_service, x.prochaineVidange, warning);
-        addRow(R.drawable.ic_check_circle, R.string.label_technical_check, x.controleTechnique, success);
+        String vidange = x.vidangeCibleKm > 0 ? getString(R.string.service_in_km, String.valueOf(x.vidangeCibleKm) + " km") : "--";
+        addRow(R.drawable.ic_wrench, R.string.label_next_service, vidange, warning);
+        String ct = (x.controleTechniqueDate != null && !x.controleTechniqueDate.isEmpty()) ? x.controleTechniqueDate : "--";
+        addRow(R.drawable.ic_check_circle, R.string.label_technical_check, ct, success);
     }
 
     private View addRow(int iconRes, int labelRes, String value, int valueColor) {
