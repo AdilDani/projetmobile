@@ -52,14 +52,20 @@ public class HistoriqueActivity extends AppCompatActivity {
         });
     }
 
+    private static String locationLabel(String name, double lat, double lng) {
+        if (name != null && !name.trim().isEmpty()) return name;
+        if (lat != 0.0 || lng != 0.0) return String.format("%.5f, %.5f", lat, lng);
+        return "—";
+    }
+
     private void bindSummary(Trajet today) {
         ((TextView) findViewById(R.id.stat_distance)).setText(today.distanceKm + " km");
         ((TextView) findViewById(R.id.stat_duration)).setText(today.duree);
         ((TextView) findViewById(R.id.stat_avg_speed)).setText(today.vitesseMoyenne + " km/h");
 
-        ((TextView) findViewById(R.id.text_depart)).setText(today.depart);
+        ((TextView) findViewById(R.id.text_depart)).setText(locationLabel(today.depart, today.departLat, today.departLng));
         ((TextView) findViewById(R.id.text_depart_time)).setText(today.heureDepart);
-        ((TextView) findViewById(R.id.text_arrival)).setText(today.arrivee);
+        ((TextView) findViewById(R.id.text_arrival)).setText(locationLabel(today.arrivee, today.arriveeLat, today.arriveeLng));
         ((TextView) findViewById(R.id.text_arrival_time)).setText(today.heureArrivee);
 
         ((TextView) findViewById(R.id.text_total_distance)).setText(today.distanceKm + " km");
