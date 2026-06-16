@@ -78,7 +78,9 @@ public class PositionFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
         map.getUiSettings().setZoomControlsEnabled(true);
-        refreshPosition();
+        // Restart poll loop so it fires immediately now that the map is ready.
+        handler.removeCallbacks(pollRunnable);
+        handler.post(pollRunnable);
     }
 
     private void refreshPosition() {
