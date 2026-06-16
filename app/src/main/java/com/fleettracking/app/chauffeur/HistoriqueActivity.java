@@ -53,8 +53,8 @@ public class HistoriqueActivity extends AppCompatActivity {
     }
 
     private static String locationLabel(String name, double lat, double lng) {
-        if (name != null && !name.trim().isEmpty()) return name;
         if (lat != 0.0 || lng != 0.0) return String.format("%.5f, %.5f", lat, lng);
+        if (name != null && !name.trim().isEmpty()) return name;
         return "—";
     }
 
