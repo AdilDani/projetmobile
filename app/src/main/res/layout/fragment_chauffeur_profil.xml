@@ -67,7 +67,6 @@
 
             <include layout="@layout/item_profile_menu" android:id="@+id/row_personal" />
             <include layout="@layout/item_profile_menu" android:id="@+id/row_settings" />
-            <include layout="@layout/item_profile_menu" android:id="@+id/row_notifications" />
             <include layout="@layout/item_profile_menu" android:id="@+id/row_help" />
             <include layout="@layout/item_profile_menu" android:id="@+id/row_logout" />
         </LinearLayout>

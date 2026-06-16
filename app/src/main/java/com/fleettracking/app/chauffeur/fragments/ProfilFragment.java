@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -38,7 +37,6 @@ public class ProfilFragment extends Fragment {
 
         configRow(v, R.id.row_personal, R.drawable.ic_person, R.string.profile_personal_info, false);
         configRow(v, R.id.row_settings, R.drawable.ic_settings, R.string.profile_settings, false);
-        configRow(v, R.id.row_notifications, R.drawable.ic_bell, R.string.profile_notifications, true);
         configRow(v, R.id.row_help, R.drawable.ic_help, R.string.profile_help, false);
         View logout = configRow(v, R.id.row_logout, R.drawable.ic_logout, R.string.profile_logout, false);
 
@@ -47,10 +45,6 @@ public class ProfilFragment extends Fragment {
         ((TextView) logout.findViewById(R.id.menu_label)).setTextColor(danger);
 
         Prefs prefs = new Prefs(requireContext());
-        SwitchCompat notifSwitch = v.findViewById(R.id.row_notifications)
-                .findViewById(R.id.menu_switch);
-        notifSwitch.setChecked(prefs.isNotificationsEnabled());
-        notifSwitch.setOnCheckedChangeListener((b, checked) -> prefs.setNotificationsEnabled(checked));
 
         v.findViewById(R.id.row_personal).setOnClickListener(x ->
                 startActivity(new Intent(getContext(), EditProfileActivity.class)));
