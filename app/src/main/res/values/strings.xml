@@ -21,7 +21,7 @@
 
     <!-- Login -->
     <string name="login_title">Connexion</string>
-    <string name="login_email_hint">Email</string>
+    <string name="login_email_hint">Identifiant</string>
     <string name="login_password_hint">Mot de passe</string>
     <string name="login_button">Se connecter</string>
     <string name="login_remember_me">Se souvenir de moi</string>

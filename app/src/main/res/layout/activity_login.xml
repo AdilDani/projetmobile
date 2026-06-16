@@ -100,10 +100,10 @@
                 style="@style/Input"
                 android:layout_marginTop="@dimen/space_l"
                 android:hint="@string/login_email_hint"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:drawableStart="@drawable/ic_email"
                 android:drawablePadding="@dimen/space_m"
-                android:autofillHints="emailAddress" />
+                android:autofillHints="username" />
 
             <EditText
                 android:id="@+id/input_password"
