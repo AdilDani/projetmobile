@@ -126,6 +126,8 @@
     <string name="field_description">Description</string>
     <string name="field_description_hint">Décrivez l\'incident...</string>
     <string name="field_photo">Photo</string>
+    <string name="photo_take">Prendre une photo</string>
+    <string name="photo_gallery">Choisir depuis la galerie</string>
     <string name="no_photo_available">Aucune photo disponible</string>
     <string name="field_location">Localisation</string>
     <string name="incident_type_mechanical">Panne mécanique</string>

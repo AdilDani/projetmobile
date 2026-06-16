@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,9 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import java.io.InputStream;
 
 import com.fleettracking.app.R;
 import com.fleettracking.app.data.ApiClient;
@@ -43,6 +48,7 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 101;
     private static final int REQUEST_CAMERA_PERMISSION = 102;
     private static final int REQUEST_NOTIF_PERMISSION = 103;
+    private static final int REQUEST_GALLERY_PICK = 104;
 
     private ImageView imagePhoto;
     private Spinner spinnerType;
@@ -61,8 +67,8 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
         spinnerType = findViewById(R.id.spinner_type);
         inputDescription = findViewById(R.id.input_description);
 
-        findViewById(R.id.btn_add_photo).setOnClickListener(v -> requestCamera());
-        imagePhoto.setOnClickListener(v -> requestCamera());
+        findViewById(R.id.btn_add_photo).setOnClickListener(v -> showPhotoDialog());
+        imagePhoto.setOnClickListener(v -> showPhotoDialog());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
@@ -87,6 +93,25 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
 
             new SendIncidentTask(this, chauffeurId, type, desc, photoBase64).execute();
         });
+    }
+
+    private void showPhotoDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.field_photo)
+                .setItems(new CharSequence[]{
+                        getString(R.string.photo_take),
+                        getString(R.string.photo_gallery)
+                }, (dialog, which) -> {
+                    if (which == 0) requestCamera();
+                    else launchGallery();
+                })
+                .show();
+    }
+
+    private void launchGallery() {
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        i.setType("image/*");
+        startActivityForResult(i, REQUEST_GALLERY_PICK);
     }
 
     private void requestCamera() {
@@ -128,6 +153,17 @@ public class DeclarerIncidentActivity extends AppCompatActivity {
                 capturedBitmap = (Bitmap) extras.get("data");
                 imagePhoto.setImageBitmap(capturedBitmap);
                 imagePhoto.clearColorFilter();
+            }
+        } else if (requestCode == REQUEST_GALLERY_PICK && resultCode == RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                try (InputStream is = getContentResolver().openInputStream(uri)) {
+                    capturedBitmap = BitmapFactory.decodeStream(is);
+                    imagePhoto.setImageBitmap(capturedBitmap);
+                    imagePhoto.clearColorFilter();
+                } catch (Exception e) {
+                    Toast.makeText(this, R.string.error_server, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
